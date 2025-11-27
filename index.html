@@ -3760,7 +3760,7 @@ body {
 }
 
 .merged-teaching.type-LAB {
-    background-color: rgba(92, 196, 245, 0.05)!important;
+    background-color: transparent !important;
 }
 
 .type-LEC {
@@ -3768,7 +3768,7 @@ body {
 }
 
 .merged-teaching.type-LEC {
-    background-color: rgba(38, 85, 239, 0.05)!important;
+    background-color: transparent !important;
 }
 
 .type-TUT {
@@ -3776,7 +3776,7 @@ body {
 }
 
 .merged-teaching.type-TUT {
-    background-color: rgba(92, 196, 245, 0.03)!important;
+    background-color: transparent !important;
 }
 
 .type-TRANSFER_KNOWLEDGE {
@@ -3785,8 +3785,8 @@ body {
 }
 
 .merged-teaching.type-TRANSFER_KNOWLEDGE {
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 185, 15, 0.1))!important;
-    border-left: 4px solid #FFD700 !important;
+    background: transparent !important;
+    border-left: none !important;
 }
 
 /* Merged cell styling for multi-hour sessions */
@@ -3814,7 +3814,7 @@ body {
 }
 
 .merged-teaching.type-ACTIVITY {
-    background-color: rgba(129, 69, 205, 0.05)!important;
+    background-color: transparent !important;
 }
 
 .type-PC {
@@ -3822,7 +3822,7 @@ body {
 }
 
 .merged-teaching.type-PC {
-    background-color: rgba(129, 69, 205, 0.05)!important;
+    background-color: transparent !important;
 }
 
 .type-BREAK {
@@ -3830,7 +3830,7 @@ body {
 }
 
 .merged-teaching.type-BREAK {
-    background-color: rgba(255, 193, 7, 0.05)!important;
+    background-color: transparent !important;
 }
 
 .type-NS {
@@ -3838,7 +3838,7 @@ body {
 }
 
 .merged-teaching.type-NS {
-    background-color: rgba(0, 0, 0, 0.03)!important;
+    background-color: transparent !important;
 }
 
 .type-OH {
@@ -3846,7 +3846,7 @@ body {
 }
 
 .merged-teaching.type-OH {
-    background-color: rgba(32, 206, 115, 0.05)!important;
+    background-color: transparent !important;
 }
 
 .type-CH {
@@ -3854,7 +3854,7 @@ body {
 }
 
 .merged-teaching.type-CH {
-    background-color: rgba(185, 148, 112, 0.05)!important;
+    background-color: transparent !important;
 }
 
 /* Header Cells */
@@ -5881,6 +5881,10 @@ body {
             mergedDiv.id = sessionId;
             mergedDiv.style.width = Math.round(totalWidth) + 'px';
             
+            // Add type class for styling
+            const typeClass = `type-${type}`;
+            mergedDiv.classList.add(typeClass);
+            
             const cancelBtn = document.createElement('button');
             cancelBtn.className = 'btn-cancel';
             cancelBtn.textContent = '✕';
@@ -5916,8 +5920,15 @@ body {
             for (let i = 0; i < length; i++) {
                 const cell = document.getElementById(`cell-${day}-${startSlot + i}`);
                 cell.dataset.sessionId = sessionId;
-                if (i > 0) {
+                // Add type class to each cell for background color
+                cell.classList.add(typeClass);
+                if (i === 0) {
+                    cell.classList.add('cell-merged-first');
+                } else {
                     cell.classList.add('cell-merged-occupied');
+                }
+                if (i === length - 1) {
+                    cell.classList.add('cell-merged-last');
                 }
             }
             
@@ -5955,6 +5966,9 @@ body {
                     cell.classList.remove('cell-merged-occupied');
                     cell.classList.remove('cell-merged-first');
                     cell.classList.remove('cell-merged-last');
+                    // Remove all type classes
+                    cell.classList.remove('type-LAB', 'type-LEC', 'type-TUT', 'type-TRANSFER_KNOWLEDGE');
+                    cell.classList.remove('type-ACTIVITY', 'type-PC', 'type-NS', 'type-OH', 'type-CH', 'type-BREAK');
                     // Reset background color to original white/transparent
                     cell.style.backgroundColor = '';
                 }
@@ -8032,12 +8046,16 @@ document.querySelectorAll('.cell-content').forEach(content => {
             
             // Add cell-merged-first class to first cell (Top, Bottom, Left borders only)
             firstCell.classList.add('cell-merged-first');
+            // Add type class to first cell for background color
+            firstCell.classList.add(typeClass);
             
             // Mark continuation cells
             for (let i = 1; i < length; i++) {
                 const cell = document.getElementById(`cell-${day}-${startSlot + i}`);
                 cell.classList.add('cell-merged-occupied');
                 cell.dataset.sessionId = sessionId;
+                // Add type class to each cell for background color
+                cell.classList.add(typeClass);
                 
                 // Add special class to last cell (Top, Bottom, Right borders only)
                 if (i === length - 1) {
@@ -8500,16 +8518,56 @@ applied: true
         
         // Recompute merged widths on resize
         function reflowMergedSessions() {
+            // Method 1: Use mergedSessions object
             Object.keys(mergedSessions).forEach(sessionId => {
                 const s = mergedSessions[sessionId];
+                if (!s || !s.day || s.startSlot === undefined || !s.length) return;
+                
                 const firstCell = document.getElementById(`cell-${s.day}-${s.startSlot}`);
                 const lastCell = document.getElementById(`cell-${s.day}-${s.startSlot + s.length - 1}`);
                 if (!firstCell || !lastCell) return;
+                
                 const firstRect = firstCell.getBoundingClientRect();
                 const lastRect = lastCell.getBoundingClientRect();
                 const width = Math.round(lastRect.right - firstRect.left);
-                const mergedDiv = firstCell.querySelector(`#${sessionId}`);
-                if (mergedDiv) mergedDiv.style.width = width + 'px';
+                
+                // Try multiple ways to find the merged div
+                let mergedDiv = document.getElementById(sessionId);
+                if (!mergedDiv) {
+                    mergedDiv = firstCell.querySelector('.merged-teaching');
+                }
+                if (!mergedDiv) {
+                    mergedDiv = firstCell.querySelector('[id^="session-"]');
+                }
+                
+                if (mergedDiv && width > 0) {
+                    mergedDiv.style.width = width + 'px';
+                }
+            });
+            
+            // Method 2: Fallback - find ALL merged-teaching divs and recalculate
+            document.querySelectorAll('.merged-teaching').forEach(mergedDiv => {
+                const parentCell = mergedDiv.closest('.schedule-cell');
+                if (!parentCell) return;
+                
+                const sessionId = parentCell.dataset.sessionId || mergedDiv.id;
+                if (!sessionId) return;
+                
+                // Find session data
+                const session = mergedSessions[sessionId];
+                if (!session || !session.day || session.startSlot === undefined || !session.length) return;
+                
+                const firstCell = document.getElementById(`cell-${session.day}-${session.startSlot}`);
+                const lastCell = document.getElementById(`cell-${session.day}-${session.startSlot + session.length - 1}`);
+                if (!firstCell || !lastCell) return;
+                
+                const firstRect = firstCell.getBoundingClientRect();
+                const lastRect = lastCell.getBoundingClientRect();
+                const width = Math.round(lastRect.right - firstRect.left);
+                
+                if (width > 0) {
+                    mergedDiv.style.width = width + 'px';
+                }
             });
         }
         window.addEventListener('resize', reflowMergedSessions);
