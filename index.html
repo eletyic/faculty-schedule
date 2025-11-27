@@ -521,19 +521,19 @@
     }
     
     /* Keep borders on faculty/course inputs for print - MUST come first */
-    select.course-code-input,
-    select.faculty-input-keep,
+    input.course-code-input,
     input.course-name-input,
-    input.faculty-input-keep {
+    input.faculty-input-keep,
+    select.faculty-input-keep {
         border: 1px solid #999 !important;
         background: white !important;
         border-radius: 4px !important;
     }
     
     /* Hide all input fields - but keep borders on faculty inputs */
-    input[type="text"]:not(.faculty-input-keep):not(.course-name-input),
+    input[type="text"]:not(.faculty-input-keep):not(.course-name-input):not(.course-code-input),
     input[type="number"]:not(.faculty-input-keep),
-    select:not(.course-code-input):not(.faculty-input-keep),
+    select:not(.faculty-input-keep),
     textarea {
         border: none !important;
         background: transparent !important;
@@ -672,24 +672,21 @@
 
 /* Ensure course inputs show borders during PDF export */
 .pdf-export-mode .course-row input,
-.pdf-export-mode .course-row select,
 .pdf-export-mode .course-code-input,
-.pdf-export-mode .course-code-custom,
 .pdf-export-mode .course-name-input,
 .pdf-export-mode .faculty-info input,
 .pdf-export-mode .faculty-info select,
-.pdf-export-mode select.course-code-input,
+.pdf-export-mode input.course-code-input,
 .pdf-export-mode input.course-name-input {
     border: 1px solid #999 !important;
     background: white !important;
     border-radius: 4px !important;
-    -webkit-appearance: none !important;
-    appearance: none !important;
 }
 
-/* Specifically target the course code select dropdown */
-body.pdf-export-mode .course-row select.course-code-input,
-body.pdf-export-mode select.course-code-input.faculty-input-keep {
+/* Specifically target course inputs with high specificity */
+body.pdf-export-mode .course-row input.course-code-input,
+body.pdf-export-mode .course-row input.course-name-input,
+body.pdf-export-mode input.faculty-input-keep {
     border: 1px solid #999 !important;
     background: white !important;
     border-radius: 4px !important;
@@ -4318,14 +4315,14 @@ body {
             codeInput.type = 'text';
             codeInput.placeholder = 'Course Code';
             codeInput.className = 'course-code-input faculty-input-keep';
-            codeInput.style.cssText = 'padding: 0.4rem; font-size: 0.8125rem; border: 1px solid #999; width: 120px; text-transform: uppercase;';
+            codeInput.style.cssText = 'padding: 0.4rem; font-size: 0.8125rem; border: 1px solid #999 !important; border-radius: 4px; width: 120px; text-transform: uppercase; background: white;';
             
             // Course name input (inline, no label)
             const nameInput = document.createElement('input');
             nameInput.type = 'text';
             nameInput.placeholder = 'Course Name';
             nameInput.className = 'course-name-input faculty-input-keep';
-            nameInput.style.cssText = 'padding: 0.4rem; font-size: 0.8125rem; border: 1px solid #999; flex: 1;';
+            nameInput.style.cssText = 'padding: 0.4rem; font-size: 0.8125rem; border: 1px solid #999 !important; border-radius: 4px; flex: 1; background: white;';
             
             // Build course code to name mapping from coursesData
             const courseMapping = {};
@@ -6314,10 +6311,26 @@ document.querySelectorAll('.cell-content').forEach(content => {
                 const checkbox = cell.querySelector('.cell-checkbox');
                 if (!checkbox) return;
                 
-                // Click handler
+                // Click handler on checkbox
                 checkbox.onclick = function(e) {
                     e.stopPropagation();
                     handleBatchCellSelection(this);
+                };
+                
+                // Click handler on entire cell - click anywhere to select
+                cell.onclick = function(e) {
+                    // Don't trigger if clicking on the checkbox itself (already handled)
+                    if (e.target === checkbox) return;
+                    // Don't trigger if cell is occupied
+                    if (cell.classList.contains('cell-merged-occupied') || 
+                        cell.classList.contains('merged-cell') ||
+                        cell.style.display === 'none' ||
+                        cell.dataset.sessionId) return;
+                    // Trigger checkbox selection - set checked first then handle
+                    if (checkbox.style.display !== 'none' && !checkbox.disabled) {
+                        checkbox.checked = true;
+                        handleBatchCellSelection(checkbox);
+                    }
                 };
                 
                 // Hover preview handlers
@@ -6795,15 +6808,9 @@ document.querySelectorAll('.cell-content').forEach(content => {
                 createMergedDisplay(sessionId, day, startSlot, length);
             });
             
-            // Show success message
-            const activityLabel = getActivityLabel(unifiedModalData.activityType);
-            const totalApplied = batchSelectionData.completedSets.length;
-            
             // Cleanup
             cleanupBatchSelection();
             updateCalculations();
-            
-            alert(`✅ Successfully applied ${totalApplied} × ${activityLabel}!`);
         }
         
         function cancelBatchSelection() {
@@ -6907,7 +6914,8 @@ document.querySelectorAll('.cell-content').forEach(content => {
             content.style.cssText = 'padding: 4px; font-size: 10px; font-weight: bold; text-align: center;';
             
             // Generate content based on activity type
-            // Use SHORT names for single cells (length=1), LONG names for merged (length>1)
+            // Use SHORT names for single cells (length=1), FULL names for merged (length>1)
+            // ALL TEXT MUST BE UPPERCASE
             let contentHTML = '';
             if (s.activityType === 'TEACHING') {
                 contentHTML = `
@@ -6918,23 +6926,40 @@ document.querySelectorAll('.cell-content').forEach(content => {
             } else if (s.activityType === 'OH') {
                 const ohLabel = length === 1 ? 'OH' : 'OFFICE HOURS';
                 contentHTML = `
-                    <div style="font-size: 11px; font-weight: bold;">${ohLabel}</div>
-                    ${s.location ? `<div style="font-size: 9px;">${s.location}</div>` : ''}
-                    ${s.note ? `<div style="font-size: 9px;">${s.note}</div>` : ''}
+                    <div style="font-size: 11px; font-weight: bold; text-transform: uppercase;">${ohLabel}</div>
+                    ${s.location ? `<div style="font-size: 9px; text-transform: uppercase;">${s.location}</div>` : ''}
+                    ${s.note ? `<div style="font-size: 9px; text-transform: uppercase;">${s.note}</div>` : ''}
                 `;
             } else if (s.activityType === 'NS') {
                 const nsLabel = length === 1 ? 'NS' : 'NON-SCHEDULED';
-                contentHTML = `<div style="font-size: 11px; font-weight: bold;">${nsLabel}</div>`;
+                contentHTML = `<div style="font-size: 11px; font-weight: bold; text-transform: uppercase;">${nsLabel}</div>`;
             } else if (s.activityType === 'CH') {
                 const chLabel = length === 1 ? 'CH' : 'COMPENSATED HOURS';
-                contentHTML = `<div style="font-size: 11px; font-weight: bold;">${chLabel}</div>`;
+                contentHTML = `<div style="font-size: 11px; font-weight: bold; text-transform: uppercase;">${chLabel}</div>`;
             } else if (s.activityType === 'BREAK') {
-                const breakLabel = length === 1 ? 'BREAK' : 'BREAK TIME';
-                contentHTML = `<div style="font-size: 11px; font-weight: bold;">${breakLabel}</div>`;
+                const breakLabel = length === 1 ? 'BRK' : 'BREAK';
+                contentHTML = `<div style="font-size: 11px; font-weight: bold; text-transform: uppercase;">${breakLabel}</div>`;
             } else if (s.activityType === 'ACTIVITY') {
+                // Activity sub-types with short (1 cell) and full (2+ cells) names
+                const activityNames = {
+                    'PC': { short: 'PC', full: 'PROGRAM COORDINATION' },
+                    'PAEC': { short: 'PAEC', full: 'PROGRAM ASSESSMENT & EVALUATION COMMITTEE' },
+                    'DAC': { short: 'DAC', full: 'DEPARTMENT AFFAIRS COMMITTEE' },
+                    'DAQC': { short: 'DAQC', full: 'DEPARTMENT ACADEMIC QUALITY COMMITTEE' },
+                    'DASC': { short: 'DASC', full: 'DEPARTMENT ACADEMIC SUPPORT COMMITTEE' }
+                };
+                
+                let activityLabel;
+                if (activityNames[s.activitySubtype]) {
+                    activityLabel = length === 1 ? activityNames[s.activitySubtype].short : activityNames[s.activitySubtype].full;
+                } else {
+                    // Custom activity - use the entered name, abbreviate for 1 cell
+                    activityLabel = length === 1 ? s.activitySubtype.substring(0, 4).toUpperCase() : s.activitySubtype.toUpperCase();
+                }
+                
                 contentHTML = `
-                    <div style="font-size: 11px; font-weight: bold;">${s.activitySubtype}</div>
-                    ${s.location ? `<div style="font-size: 9px;">${s.location}</div>` : ''}
+                    <div style="font-size: ${length === 1 ? '11px' : '10px'}; font-weight: bold; text-transform: uppercase;">${activityLabel}</div>
+                    ${s.location ? `<div style="font-size: 9px; text-transform: uppercase;">${s.location}</div>` : ''}
                 `;
             }
             
