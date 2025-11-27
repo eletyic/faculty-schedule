@@ -5582,6 +5582,7 @@ body {
             if (facultySelect && facultySelect.tagName === 'SELECT') {
                 facultySelect.addEventListener('change', function() {
                     const selectedName = this.value;
+                    const instructorAckNameInput = document.getElementById('instructorAckName');
                     if (selectedName) {
                         const faculty = facultyData.find(f => f.name === selectedName);
                         if (faculty) {
@@ -5590,6 +5591,11 @@ body {
                             document.getElementById('email').value = faculty.email || '';
                             document.getElementById('phone').value = faculty.phone || '';
                             document.getElementById('officeLocation').value = faculty.office || '';
+                            // Sync acknowledgment name with rank
+                            if (instructorAckNameInput) {
+                                const rank = faculty.rank || '';
+                                instructorAckNameInput.value = rank ? `${rank} ${selectedName}` : selectedName;
+                            }
                         }
                     } else {
                         // Clear fields if no selection
@@ -5597,6 +5603,9 @@ body {
                         document.getElementById('email').value = '';
                         document.getElementById('phone').value = '';
                         document.getElementById('officeLocation').value = '';
+                        if (instructorAckNameInput) {
+                            instructorAckNameInput.value = '';
+                        }
                     }
                 });
             }
@@ -9273,6 +9282,14 @@ async function exportToPDF() {
         if (el) el.style.display = 'none';
     });
     
+    // Convert all input values to uppercase for PDF export
+    const inputsToUppercase = document.querySelectorAll('input[type="text"], input:not([type])');
+    const originalValues = new Map();
+    inputsToUppercase.forEach(input => {
+        originalValues.set(input, input.value);
+        input.value = input.value.toUpperCase();
+    });
+    
     // Scroll to top for consistent capture
     window.scrollTo(0, 0);
     
@@ -9380,6 +9397,11 @@ async function exportToPDF() {
     
     // Remove pdf-export-mode class
     document.body.classList.remove('pdf-export-mode');
+    
+    // Restore original input values (from uppercase conversion)
+    originalValues.forEach((value, input) => {
+        input.value = value;
+    });
     
     setTimeout(() => {
         elementsToHide.forEach(el => {
@@ -10265,9 +10287,17 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     document.head.appendChild(style);
     
-    // Auto-fill Faculty Acknowledgment name from Faculty Name selector
+    // Auto-fill Faculty Acknowledgment name from Faculty Name selector (includes rank)
     const facultyNameInput = document.getElementById('facultyName');
+    const facultyRankInput = document.getElementById('facultyRank');
     const instructorAckNameInput = document.getElementById('instructorAckName');
+    
+    function syncFacultyAckName() {
+        if (!instructorAckNameInput) return;
+        const rank = facultyRankInput ? facultyRankInput.value.trim() : '';
+        const name = facultyNameInput ? facultyNameInput.value.trim() : '';
+        instructorAckNameInput.value = rank ? `${rank} ${name}` : name;
+    }
     
     if (facultyNameInput && instructorAckNameInput) {
         // Convert to uppercase and sync with acknowledgment as user types
@@ -10275,8 +10305,14 @@ document.addEventListener('DOMContentLoaded', function() {
             const cursorPos = this.selectionStart;
             this.value = this.value.toUpperCase();
             this.setSelectionRange(cursorPos, cursorPos);
-            // Sync with acknowledgment name
-            instructorAckNameInput.value = this.value;
+            syncFacultyAckName();
+        });
+    }
+    
+    if (facultyRankInput && instructorAckNameInput) {
+        // Sync when rank changes
+        facultyRankInput.addEventListener('input', function() {
+            syncFacultyAckName();
         });
     }
 });
@@ -10284,20 +10320,31 @@ document.addEventListener('DOMContentLoaded', function() {
 // Function to attach faculty name uppercase and sync handler (can be called after recreating the field)
 function attachFacultyOtherHandler() {
     const facultyNameInput = document.getElementById('facultyName');
+    const facultyRankInput = document.getElementById('facultyRank');
     const instructorAckNameInput = document.getElementById('instructorAckName');
     
     if (!facultyNameInput) return;
+    
+    function syncFacultyAckName() {
+        if (!instructorAckNameInput) return;
+        const rank = facultyRankInput ? facultyRankInput.value.trim() : '';
+        const name = facultyNameInput ? facultyNameInput.value.trim() : '';
+        instructorAckNameInput.value = rank ? `${rank} ${name}` : name;
+    }
     
     // Convert to uppercase and sync with acknowledgment as user types
     facultyNameInput.addEventListener('input', function() {
         const cursorPos = this.selectionStart;
         this.value = this.value.toUpperCase();
         this.setSelectionRange(cursorPos, cursorPos);
-        // Sync with acknowledgment name if it exists
-        if (instructorAckNameInput) {
-            instructorAckNameInput.value = this.value;
-        }
+        syncFacultyAckName();
     });
+    
+    if (facultyRankInput) {
+        facultyRankInput.addEventListener('input', function() {
+            syncFacultyAckName();
+        });
+    }
 }
 
 // Call it initially on page load
