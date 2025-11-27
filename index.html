@@ -3302,6 +3302,399 @@ body {
             background: #da190b;
         }
         
+        /* Signature Modal Styles */
+        .signature-modal-content {
+            width: 500px;
+            max-width: 95%;
+        }
+        
+        .signature-tabs {
+            display: flex;
+            border-bottom: 2px solid #e0e0e0;
+            margin-bottom: 1rem;
+        }
+        
+        .signature-tab {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: none;
+            background: #f5f5f5;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.2s;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+        }
+        
+        .signature-tab:hover {
+            background: #e8e8e8;
+            color: #333;
+        }
+        
+        .signature-tab.active {
+            background: white;
+            color: var(--theme-primary);
+            border-bottom-color: var(--theme-primary);
+        }
+        
+        .signature-tab-content {
+            display: none;
+            padding: 1rem 0;
+        }
+        
+        .signature-tab-content.active {
+            display: block;
+        }
+        
+        .signature-canvas-container {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            background: #fafafa;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        
+        .signature-canvas {
+            width: 100%;
+            height: 150px;
+            cursor: crosshair;
+            touch-action: none;
+        }
+        
+        .signature-canvas-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #aaa;
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+        
+        .signature-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .pen-size-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .pen-size-control label {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        .pen-size-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        
+        .pen-size-btn:hover {
+            border-color: var(--theme-primary);
+        }
+        
+        .pen-size-btn.active {
+            border-color: var(--theme-primary);
+            background: var(--theme-primary);
+        }
+        
+        .pen-size-btn .pen-dot {
+            border-radius: 50%;
+            background: #333;
+        }
+        
+        .pen-size-btn.active .pen-dot {
+            background: white;
+        }
+        
+        .signature-type-input {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+        
+        .signature-type-preview {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            background: #fafafa;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-family: 'Brush Script MT', 'Segoe Script', 'Bradley Hand', cursive;
+            font-size: 2rem;
+            color: #001F3F;
+        }
+        
+        .signature-upload-zone {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            background: #fafafa;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 1rem;
+        }
+        
+        .signature-upload-zone:hover {
+            border-color: var(--theme-primary);
+            background: #f0f7ff;
+        }
+        
+        .signature-upload-zone.dragover {
+            border-color: var(--theme-primary);
+            background: #e3f2fd;
+        }
+        
+        .signature-upload-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .signature-upload-text {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .signature-upload-text span {
+            color: var(--theme-primary);
+            font-weight: 600;
+        }
+        
+        .signature-upload-preview {
+            max-width: 100%;
+            max-height: 120px;
+            border-radius: 4px;
+            transition: transform 0.2s;
+        }
+        
+        .signature-upload-input {
+            display: none;
+        }
+        
+        .signature-size-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: #f5f5f5;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+        
+        .signature-size-control label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #555;
+            min-width: 35px;
+        }
+        
+        .size-preset-btn {
+            width: 32px;
+            height: 32px;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.2s;
+        }
+        
+        .size-preset-btn:hover {
+            border-color: var(--theme-primary);
+            color: var(--theme-primary);
+        }
+        
+        .size-preset-btn.active {
+            background: var(--theme-primary);
+            border-color: var(--theme-primary);
+            color: white;
+        }
+        
+        .signature-size-control input[type="range"] {
+            flex: 1;
+            height: 6px;
+            border-radius: 3px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+            margin: 0 0.5rem;
+        }
+        
+        .signature-size-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--theme-primary);
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .signature-size-control input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--theme-primary);
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        #signatureSizeValue {
+            min-width: 40px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--theme-primary);
+            text-align: right;
+        }
+        
+        /* Inline signature size control (next to signature display) */
+        .signature-size-inline {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .signature-size-inline input[type="range"] {
+            width: 60px;
+            height: 4px;
+            border-radius: 2px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+        
+        .signature-size-inline input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--theme-primary);
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        .signature-size-inline input[type="range"]::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--theme-primary);
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        /* Draggable signature styles */
+        .signature-display {
+            flex: 1;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+            transition: background 0.2s;
+            position: relative;
+            overflow: visible;
+        }
+        
+        .signature-display:hover {
+            background: #f5f5f5;
+        }
+        
+        .signature-display img {
+            max-height: 35px;
+            max-width: 100%;
+            cursor: move;
+            position: relative;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        
+        .signature-display img.dragging {
+            opacity: 0.8;
+            z-index: 100;
+        }
+        
+        .signature-display .signature-placeholder {
+            color: #999;
+            font-size: 0.8rem;
+        }
+        
+        @media print {
+            .signature-size-inline {
+                display: none !important;
+            }
+            .signature-display {
+                cursor: default;
+                overflow: hidden;
+            }
+            .signature-display:hover {
+                background: transparent;
+            }
+            .signature-display img {
+                cursor: default;
+            }
+        }
+        
+        .pdf-export-mode .signature-size-inline {
+            display: none !important;
+        }
+        
+        .pdf-export-mode .signature-display {
+            cursor: default;
+            overflow: hidden;
+        }
+        
+        .pdf-export-mode .signature-display:hover {
+            background: transparent;
+        }
+        
+        .pdf-export-mode .signature-display img {
+            cursor: default;
+        }
+
+        .signature-clear-btn {
+            padding: 0.5rem 1rem;
+            background: #f5f5f5;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        
+        .signature-clear-btn:hover {
+            background: #e0e0e0;
+        }
+
         @media print {
             .modal-overlay {
                 display: none !important;
@@ -3868,7 +4261,14 @@ body {
                 </div>
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
                     <label style="min-width: 80px; font-size: 0.875rem;">Signature:</label>
-                    <div style="flex: 1; border-bottom: 1px solid #333; height: 40px;"></div>
+                    <div id="facultySignatureDisplay" class="signature-display" onclick="openSignatureModal('faculty')" title="Click to add signature">
+                        <span class="signature-placeholder">Click to sign</span>
+                    </div>
+                    <div class="signature-size-inline" id="facultySignatureSizeControl" style="display: none;">
+                        <input type="range" min="25" max="250" value="100" 
+                               oninput="resizeDisplayedSignature('faculty', this.value)"
+                               title="Adjust signature size">
+                    </div>
                 </div>
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
                     <label style="min-width: 80px; font-size: 0.875rem;">Date:</label>
@@ -3891,7 +4291,14 @@ body {
                 </div>
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
                     <label style="min-width: 80px; font-size: 0.875rem;">Signature:</label>
-                    <div style="flex: 1; border-bottom: 1px solid #333; height: 40px;"></div>
+                    <div id="hodSignatureDisplay" class="signature-display" onclick="openSignatureModal('hod')" title="Click to add signature">
+                        <span class="signature-placeholder">Click to sign</span>
+                    </div>
+                    <div class="signature-size-inline" id="hodSignatureSizeControl" style="display: none;">
+                        <input type="range" min="25" max="250" value="100" 
+                               oninput="resizeDisplayedSignature('hod', this.value)"
+                               title="Adjust signature size">
+                    </div>
                 </div>
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
                     <label style="min-width: 80px; font-size: 0.875rem;">Date:</label>
@@ -4186,6 +4593,77 @@ body {
     </div>
 </div>
 
+<!-- Signature Modal -->
+<div class="modal-overlay" id="signatureModal">
+    <div class="modal-content signature-modal-content">
+        <div class="modal-header" id="signatureModalTitle">Signature</div>
+        
+        <!-- Tabs -->
+        <div class="signature-tabs">
+            <button class="signature-tab active" data-tab="draw" onclick="switchSignatureTab('draw')">✏️ Draw</button>
+            <button class="signature-tab" data-tab="type" onclick="switchSignatureTab('type')">⌨️ Type</button>
+            <button class="signature-tab" data-tab="upload" onclick="switchSignatureTab('upload')">📤 Upload</button>
+        </div>
+        
+        <!-- Draw Tab -->
+        <div class="signature-tab-content active" id="signatureTabDraw">
+            <div class="signature-canvas-container">
+                <canvas id="signatureCanvas" class="signature-canvas"></canvas>
+                <div class="signature-canvas-placeholder" id="canvasPlaceholder">Sign here</div>
+            </div>
+            <div class="signature-controls">
+                <button class="signature-clear-btn" onclick="clearSignatureCanvas()">🗑️ Clear</button>
+                <div class="pen-size-control">
+                    <label>Pen:</label>
+                    <button class="pen-size-btn" data-size="2" onclick="setPenSize(2)">
+                        <span class="pen-dot" style="width: 4px; height: 4px;"></span>
+                    </button>
+                    <button class="pen-size-btn active" data-size="3" onclick="setPenSize(3)">
+                        <span class="pen-dot" style="width: 6px; height: 6px;"></span>
+                    </button>
+                    <button class="pen-size-btn" data-size="5" onclick="setPenSize(5)">
+                        <span class="pen-dot" style="width: 10px; height: 10px;"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Type Tab -->
+        <div class="signature-tab-content" id="signatureTabType">
+            <input type="text" class="signature-type-input" id="signatureTypeInput" placeholder="Type your name..." oninput="updateTypePreview()">
+            <div class="signature-type-preview" id="signatureTypePreview">
+                <span style="color: #aaa; font-family: sans-serif; font-size: 1rem;">Preview will appear here</span>
+            </div>
+            <div class="signature-controls">
+                <button class="signature-clear-btn" onclick="clearTypeSignature()">🗑️ Clear</button>
+            </div>
+        </div>
+        
+        <!-- Upload Tab -->
+        <div class="signature-tab-content" id="signatureTabUpload">
+            <div class="signature-upload-zone" id="signatureUploadZone" onclick="document.getElementById('signatureFileInput').click()">
+                <div id="uploadPreviewContainer">
+                    <div class="signature-upload-icon">📁</div>
+                    <div class="signature-upload-text">
+                        Drag & drop signature image here<br>
+                        or <span>click to browse</span>
+                    </div>
+                </div>
+            </div>
+            <input type="file" id="signatureFileInput" class="signature-upload-input" accept="image/*" onchange="handleSignatureUpload(event)">
+            
+            <div class="signature-controls">
+                <button class="signature-clear-btn" onclick="clearUploadedSignature()">🗑️ Clear</button>
+            </div>
+        </div>
+        
+        <div class="modal-buttons">
+            <button class="modal-btn-save" onclick="applySignature()">✓ Apply</button>
+            <button class="modal-btn-cancel" onclick="closeSignatureModal()">✕ Cancel</button>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
         // ========== SEVEN-THEME SYSTEM ==========
@@ -4263,6 +4741,575 @@ body {
         document.addEventListener('DOMContentLoaded', loadSavedTheme);
         
         // ========== END THEME SYSTEM ==========
+        
+        // ========== SIGNATURE MODAL SYSTEM ==========
+        let signatureState = {
+            currentTarget: null, // 'faculty' or 'hod'
+            currentTab: 'draw',
+            penSize: 3,
+            isDrawing: false,
+            canvas: null,
+            ctx: null,
+            uploadedImage: null,
+            signatures: {
+                faculty: null,
+                hod: null
+            }
+        };
+        
+        // Initialize signature canvas when modal opens
+        function initSignatureCanvas() {
+            const canvas = document.getElementById('signatureCanvas');
+            if (!canvas) return;
+            
+            signatureState.canvas = canvas;
+            signatureState.ctx = canvas.getContext('2d');
+            
+            // Set canvas size
+            const container = canvas.parentElement;
+            canvas.width = container.offsetWidth - 4;
+            canvas.height = 150;
+            
+            // Set drawing style
+            signatureState.ctx.strokeStyle = '#001F3F';
+            signatureState.ctx.lineWidth = signatureState.penSize;
+            signatureState.ctx.lineCap = 'round';
+            signatureState.ctx.lineJoin = 'round';
+            
+            // Mouse events
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+            
+            // Touch events
+            canvas.addEventListener('touchstart', handleTouchStart);
+            canvas.addEventListener('touchmove', handleTouchMove);
+            canvas.addEventListener('touchend', stopDrawing);
+        }
+        
+        function startDrawing(e) {
+            signatureState.isDrawing = true;
+            const rect = signatureState.canvas.getBoundingClientRect();
+            signatureState.ctx.beginPath();
+            signatureState.ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+            document.getElementById('canvasPlaceholder').style.display = 'none';
+        }
+        
+        function draw(e) {
+            if (!signatureState.isDrawing) return;
+            const rect = signatureState.canvas.getBoundingClientRect();
+            signatureState.ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            signatureState.ctx.stroke();
+        }
+        
+        function stopDrawing() {
+            signatureState.isDrawing = false;
+        }
+        
+        function handleTouchStart(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = signatureState.canvas.getBoundingClientRect();
+            signatureState.isDrawing = true;
+            signatureState.ctx.beginPath();
+            signatureState.ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+            document.getElementById('canvasPlaceholder').style.display = 'none';
+        }
+        
+        function handleTouchMove(e) {
+            e.preventDefault();
+            if (!signatureState.isDrawing) return;
+            const touch = e.touches[0];
+            const rect = signatureState.canvas.getBoundingClientRect();
+            signatureState.ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+            signatureState.ctx.stroke();
+        }
+        
+        function clearSignatureCanvas() {
+            if (signatureState.ctx && signatureState.canvas) {
+                signatureState.ctx.clearRect(0, 0, signatureState.canvas.width, signatureState.canvas.height);
+                document.getElementById('canvasPlaceholder').style.display = 'block';
+            }
+        }
+        
+        function setPenSize(size) {
+            signatureState.penSize = size;
+            if (signatureState.ctx) {
+                signatureState.ctx.lineWidth = size;
+            }
+            // Update button states
+            document.querySelectorAll('.pen-size-btn').forEach(btn => {
+                btn.classList.toggle('active', parseInt(btn.dataset.size) === size);
+            });
+        }
+        
+        function switchSignatureTab(tab) {
+            signatureState.currentTab = tab;
+            
+            // Update tab buttons
+            document.querySelectorAll('.signature-tab').forEach(t => {
+                t.classList.toggle('active', t.dataset.tab === tab);
+            });
+            
+            // Update tab content
+            document.getElementById('signatureTabDraw').classList.toggle('active', tab === 'draw');
+            document.getElementById('signatureTabType').classList.toggle('active', tab === 'type');
+            document.getElementById('signatureTabUpload').classList.toggle('active', tab === 'upload');
+            
+            // Initialize canvas when switching to draw tab
+            if (tab === 'draw') {
+                setTimeout(initSignatureCanvas, 100);
+            }
+        }
+        
+        function updateTypePreview() {
+            const input = document.getElementById('signatureTypeInput');
+            const preview = document.getElementById('signatureTypePreview');
+            if (input.value.trim()) {
+                preview.innerHTML = `<span>${input.value}</span>`;
+            } else {
+                preview.innerHTML = '<span style="color: #aaa; font-family: sans-serif; font-size: 1rem;">Preview will appear here</span>';
+            }
+        }
+        
+        function clearTypeSignature() {
+            document.getElementById('signatureTypeInput').value = '';
+            updateTypePreview();
+        }
+        
+        function handleSignatureUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            if (!file.type.startsWith('image/')) {
+                alert('Please upload an image file');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                signatureState.uploadedImage = e.target.result;
+                const container = document.getElementById('uploadPreviewContainer');
+                container.innerHTML = `<img src="${e.target.result}" class="signature-upload-preview" alt="Signature">`;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function clearUploadedSignature() {
+            signatureState.uploadedImage = null;
+            document.getElementById('signatureFileInput').value = '';
+            document.getElementById('uploadPreviewContainer').innerHTML = `
+                <div class="signature-upload-icon">📁</div>
+                <div class="signature-upload-text">
+                    Drag & drop signature image here<br>
+                    or <span>click to browse</span>
+                </div>
+            `;
+        }
+        
+        // Resize displayed signature in the schedule (inline control)
+        function resizeDisplayedSignature(target, value) {
+            const displayId = target === 'faculty' ? 'facultySignatureDisplay' : 'hodSignatureDisplay';
+            const display = document.getElementById(displayId);
+            const img = display.querySelector('img');
+            if (img) {
+                const scale = value / 100;
+                // Preserve position while scaling
+                const pos = signatureState.signaturePositions?.[target] || { x: 0, y: 0 };
+                img.style.transform = `translate(${pos.x}px, ${pos.y}px) scale(${scale})`;
+                img.style.transformOrigin = 'center center';
+            }
+            
+            // Save size preference
+            signatureState.signatureSizes = signatureState.signatureSizes || {};
+            signatureState.signatureSizes[target] = parseInt(value);
+            saveSignaturesToStorage();
+        }
+        
+        // Signature dragging functionality
+        let signatureDragState = {
+            isDragging: false,
+            target: null,
+            startX: 0,
+            startY: 0,
+            currentX: 0,
+            currentY: 0
+        };
+        
+        function initSignatureDrag(img, target) {
+            img.addEventListener('mousedown', function(e) {
+                // Prevent opening modal when dragging
+                e.stopPropagation();
+                startSignatureDrag(e, target);
+            });
+            
+            img.addEventListener('touchstart', function(e) {
+                e.stopPropagation();
+                const touch = e.touches[0];
+                startSignatureDrag({ clientX: touch.clientX, clientY: touch.clientY, preventDefault: () => e.preventDefault() }, target);
+            }, { passive: false });
+        }
+        
+        function startSignatureDrag(e, target) {
+            e.preventDefault();
+            
+            signatureDragState.isDragging = true;
+            signatureDragState.target = target;
+            
+            // Get current position
+            const pos = signatureState.signaturePositions?.[target] || { x: 0, y: 0 };
+            signatureDragState.currentX = pos.x;
+            signatureDragState.currentY = pos.y;
+            signatureDragState.startX = e.clientX - pos.x;
+            signatureDragState.startY = e.clientY - pos.y;
+            
+            const displayId = target === 'faculty' ? 'facultySignatureDisplay' : 'hodSignatureDisplay';
+            const img = document.getElementById(displayId).querySelector('img');
+            if (img) {
+                img.classList.add('dragging');
+            }
+            
+            document.addEventListener('mousemove', dragSignature);
+            document.addEventListener('mouseup', stopSignatureDrag);
+            document.addEventListener('touchmove', dragSignatureTouch, { passive: false });
+            document.addEventListener('touchend', stopSignatureDrag);
+        }
+        
+        function dragSignature(e) {
+            if (!signatureDragState.isDragging) return;
+            
+            e.preventDefault();
+            
+            const x = e.clientX - signatureDragState.startX;
+            const y = e.clientY - signatureDragState.startY;
+            
+            updateSignaturePosition(signatureDragState.target, x, y);
+        }
+        
+        function dragSignatureTouch(e) {
+            if (!signatureDragState.isDragging) return;
+            
+            e.preventDefault();
+            const touch = e.touches[0];
+            
+            const x = touch.clientX - signatureDragState.startX;
+            const y = touch.clientY - signatureDragState.startY;
+            
+            updateSignaturePosition(signatureDragState.target, x, y);
+        }
+        
+        function updateSignaturePosition(target, x, y) {
+            const displayId = target === 'faculty' ? 'facultySignatureDisplay' : 'hodSignatureDisplay';
+            const display = document.getElementById(displayId);
+            const img = display.querySelector('img');
+            
+            if (img) {
+                const scale = (signatureState.signatureSizes?.[target] || 100) / 100;
+                img.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+                
+                signatureDragState.currentX = x;
+                signatureDragState.currentY = y;
+            }
+        }
+        
+        function stopSignatureDrag() {
+            if (!signatureDragState.isDragging) return;
+            
+            const target = signatureDragState.target;
+            const displayId = target === 'faculty' ? 'facultySignatureDisplay' : 'hodSignatureDisplay';
+            const img = document.getElementById(displayId).querySelector('img');
+            
+            if (img) {
+                img.classList.remove('dragging');
+            }
+            
+            // Save position
+            signatureState.signaturePositions = signatureState.signaturePositions || {};
+            signatureState.signaturePositions[target] = {
+                x: signatureDragState.currentX,
+                y: signatureDragState.currentY
+            };
+            saveSignaturesToStorage();
+            
+            signatureDragState.isDragging = false;
+            signatureDragState.target = null;
+            
+            document.removeEventListener('mousemove', dragSignature);
+            document.removeEventListener('mouseup', stopSignatureDrag);
+            document.removeEventListener('touchmove', dragSignatureTouch);
+            document.removeEventListener('touchend', stopSignatureDrag);
+        }
+        
+        function openSignatureModal(target) {
+            // Don't open modal if we just finished dragging
+            if (signatureDragState.isDragging) return;
+            
+            signatureState.currentTarget = target;
+            
+            // Update modal title
+            const title = target === 'faculty' ? 'Faculty Signature' : 'Head of Department Signature';
+            document.getElementById('signatureModalTitle').textContent = title;
+            
+            // Reset modal state
+            clearSignatureCanvas();
+            clearTypeSignature();
+            clearUploadedSignature();
+            switchSignatureTab('draw');
+            
+            // Show modal
+            document.getElementById('signatureModal').classList.add('active');
+            
+            // Initialize canvas after modal is visible
+            setTimeout(initSignatureCanvas, 150);
+        }
+        
+        function closeSignatureModal() {
+            document.getElementById('signatureModal').classList.remove('active');
+            signatureState.currentTarget = null;
+        }
+        
+        function applySignature() {
+            let signatureData = null;
+            
+            if (signatureState.currentTab === 'draw') {
+                // Check if canvas has content
+                const canvas = signatureState.canvas;
+                if (canvas) {
+                    const ctx = canvas.getContext('2d');
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const hasContent = imageData.data.some((value, index) => index % 4 === 3 && value > 0);
+                    if (hasContent) {
+                        signatureData = canvas.toDataURL('image/png');
+                    }
+                }
+            } else if (signatureState.currentTab === 'type') {
+                const text = document.getElementById('signatureTypeInput').value.trim();
+                if (text) {
+                    // Create signature image from text
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = 300;
+                    tempCanvas.height = 60;
+                    const ctx = tempCanvas.getContext('2d');
+                    ctx.fillStyle = '#001F3F';
+                    ctx.font = 'italic 32px "Brush Script MT", "Segoe Script", "Bradley Hand", cursive';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(text, 150, 30);
+                    signatureData = tempCanvas.toDataURL('image/png');
+                }
+            } else if (signatureState.currentTab === 'upload') {
+                if (signatureState.uploadedImage) {
+                    // Just use the uploaded image directly (size will be controlled by slider)
+                    const currentTarget = signatureState.currentTarget;
+                    
+                    // Store signature
+                    signatureState.signatures[currentTarget] = signatureState.uploadedImage;
+                    
+                    // Reset position for new signature
+                    signatureState.signaturePositions = signatureState.signaturePositions || {};
+                    signatureState.signaturePositions[currentTarget] = { x: 0, y: 0 };
+                    
+                    // Update display
+                    const displayId = currentTarget === 'faculty' ? 'facultySignatureDisplay' : 'hodSignatureDisplay';
+                    const display = document.getElementById(displayId);
+                    display.innerHTML = `<img src="${signatureState.uploadedImage}" alt="Signature">`;
+                    
+                    // Init drag on the new image
+                    const displayImg = display.querySelector('img');
+                    if (displayImg) {
+                        initSignatureDrag(displayImg, currentTarget);
+                    }
+                    
+                    // Show size control
+                    showSignatureSizeControl(currentTarget);
+                    
+                    // Save to localStorage
+                    saveSignaturesToStorage();
+                    
+                    // Close modal
+                    closeSignatureModal();
+                    return;
+                }
+            }
+            
+            if (!signatureData) {
+                alert('Please create a signature first');
+                return;
+            }
+            
+            // Store signature
+            signatureState.signatures[signatureState.currentTarget] = signatureData;
+            
+            // Reset position for new signature
+            signatureState.signaturePositions = signatureState.signaturePositions || {};
+            signatureState.signaturePositions[signatureState.currentTarget] = { x: 0, y: 0 };
+            
+            // Update display
+            const displayId = signatureState.currentTarget === 'faculty' ? 'facultySignatureDisplay' : 'hodSignatureDisplay';
+            const display = document.getElementById(displayId);
+            display.innerHTML = `<img src="${signatureData}" alt="Signature">`;
+            
+            // Init drag on the new image
+            const img = display.querySelector('img');
+            if (img) {
+                initSignatureDrag(img, signatureState.currentTarget);
+            }
+            
+            // Show size control
+            showSignatureSizeControl(signatureState.currentTarget);
+            
+            // Save to localStorage
+            saveSignaturesToStorage();
+            
+            // Close modal
+            closeSignatureModal();
+        }
+        
+        function showSignatureSizeControl(target) {
+            const controlId = target === 'faculty' ? 'facultySignatureSizeControl' : 'hodSignatureSizeControl';
+            const control = document.getElementById(controlId);
+            if (control) {
+                control.style.display = 'flex';
+                // Reset slider to 100%
+                const slider = control.querySelector('input[type="range"]');
+                if (slider) {
+                    slider.value = 100;
+                }
+            }
+        }
+        
+        function hideSignatureSizeControl(target) {
+            const controlId = target === 'faculty' ? 'facultySignatureSizeControl' : 'hodSignatureSizeControl';
+            const control = document.getElementById(controlId);
+            if (control) {
+                control.style.display = 'none';
+            }
+        }
+        
+        function saveSignaturesToStorage() {
+            try {
+                const dataToSave = {
+                    signatures: signatureState.signatures,
+                    sizes: signatureState.signatureSizes || {},
+                    positions: signatureState.signaturePositions || {}
+                };
+                localStorage.setItem('rcjy-signatures', JSON.stringify(dataToSave));
+            } catch (e) {
+                console.warn('Could not save signatures to localStorage:', e);
+            }
+        }
+        
+        function loadSignaturesFromStorage() {
+            try {
+                const saved = localStorage.getItem('rcjy-signatures');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    
+                    // Handle both old format (just signatures) and new format (signatures + sizes + positions)
+                    if (data.signatures) {
+                        signatureState.signatures = data.signatures;
+                        signatureState.signatureSizes = data.sizes || {};
+                        signatureState.signaturePositions = data.positions || {};
+                    } else {
+                        // Old format - just signatures object
+                        signatureState.signatures = data;
+                        signatureState.signatureSizes = {};
+                        signatureState.signaturePositions = {};
+                    }
+                    
+                    // Update displays and show size controls
+                    if (signatureState.signatures.faculty) {
+                        const facultyDisplay = document.getElementById('facultySignatureDisplay');
+                        facultyDisplay.innerHTML = `<img src="${signatureState.signatures.faculty}" alt="Signature">`;
+                        showSignatureSizeControl('faculty');
+                        
+                        // Init drag on the image
+                        const facultyImg = facultyDisplay.querySelector('img');
+                        if (facultyImg) {
+                            initSignatureDrag(facultyImg, 'faculty');
+                        }
+                        
+                        // Apply saved size and position
+                        const facultySize = signatureState.signatureSizes.faculty || 100;
+                        const facultyPos = signatureState.signaturePositions.faculty || { x: 0, y: 0 };
+                        const slider = document.querySelector('#facultySignatureSizeControl input[type="range"]');
+                        if (slider) {
+                            slider.value = facultySize;
+                        }
+                        if (facultyImg) {
+                            facultyImg.style.transform = `translate(${facultyPos.x}px, ${facultyPos.y}px) scale(${facultySize / 100})`;
+                            facultyImg.style.transformOrigin = 'center center';
+                        }
+                    }
+                    if (signatureState.signatures.hod) {
+                        const hodDisplay = document.getElementById('hodSignatureDisplay');
+                        hodDisplay.innerHTML = `<img src="${signatureState.signatures.hod}" alt="Signature">`;
+                        showSignatureSizeControl('hod');
+                        
+                        // Init drag on the image
+                        const hodImg = hodDisplay.querySelector('img');
+                        if (hodImg) {
+                            initSignatureDrag(hodImg, 'hod');
+                        }
+                        
+                        // Apply saved size and position
+                        const hodSize = signatureState.signatureSizes.hod || 100;
+                        const hodPos = signatureState.signaturePositions.hod || { x: 0, y: 0 };
+                        const slider = document.querySelector('#hodSignatureSizeControl input[type="range"]');
+                        if (slider) {
+                            slider.value = hodSize;
+                        }
+                        if (hodImg) {
+                            hodImg.style.transform = `translate(${hodPos.x}px, ${hodPos.y}px) scale(${hodSize / 100})`;
+                            hodImg.style.transformOrigin = 'center center';
+                        }
+                    }
+                }
+            } catch (e) {
+                console.warn('Could not load signatures from localStorage:', e);
+            }
+        }
+        
+        // Setup drag and drop for upload zone
+        function setupSignatureUploadDragDrop() {
+            const zone = document.getElementById('signatureUploadZone');
+            if (!zone) return;
+            
+            zone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                zone.classList.add('dragover');
+            });
+            
+            zone.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                zone.classList.remove('dragover');
+            });
+            
+            zone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                zone.classList.remove('dragover');
+                
+                const file = e.dataTransfer.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        signatureState.uploadedImage = ev.target.result;
+                        document.getElementById('uploadPreviewContainer').innerHTML = 
+                            `<img src="${ev.target.result}" class="signature-upload-preview" alt="Signature">`;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        
+        // Initialize signatures on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSignaturesFromStorage();
+            setupSignatureUploadDragDrop();
+        });
+        
+        // ========== END SIGNATURE MODAL SYSTEM ==========
 
         // Faculty data from Excel file
         const facultyData = [{"rank":"Eng.","name":"Sami Alalwani","jobTitle":"Lecturer","office":"ACX-F139","phone":"NA","email":"hsami@rcjy.edu.sa"},{"rank":"Eng.","name":"Motaz Mohamed Deebes","jobTitle":"Lecturer","office":"ACX-F136","phone":"41896","email":"mdeebes@rcjy.edu.sa;"},{"rank":"Dr.","name":"Ali Abdullah Sayghe","jobTitle":"Assistant Professor","office":"ACX-F66","phone":"41129","email":"sayghea@rcjy.edu.sa;"},{"rank":"Dr.","name":"Abdularahman Hawsawi","jobTitle":"Lecturer","office":"NA","phone":"NA","email":"husawia@rcyci.edu.sa"},{"rank":"Eng.","name":"Mir Masood Zuberi","jobTitle":"Trainer","office":"APX-F30","phone":"41357","email":"mzuberi@rcjy.edu.sa;"},{"rank":"Eng.","name":"Mohammad Istiaq Ahmad","jobTitle":"Lecturer","office":"ACX-F71","phone":"41428","email":"ahmad1@rcjy.edu.sa;"},{"rank":"Eng.","name":"Suresh Kalidas","jobTitle":"Lecturer","office":"ACXF135","phone":"41386","email":"khalidas@rcjy.edu.sa;"},{"rank":"Eng.","name":"Mustajab Ahmad khan","jobTitle":"Lecturer","office":"ACX-F137","phone":"41398","email":"mustajab@rcjy.edu.sa;"},{"rank":"Eng.","name":"Roberto Maximo Cenidoza","jobTitle":"Lecturer","office":"ACX-F62","phone":"41457","email":"cenidozar@rcjy.edu.sa;"},{"rank":"Eng.","name":"Fawwaz Ahmed Ayesh","jobTitle":"Lecturer","office":"APX-F23","phone":"41362","email":"fayesh@rcjy.edu.sa;"},{"rank":"Dr.","name":"Fahad Ahmed Banakhr","jobTitle":"Associate Professor","office":"ACX-F143","phone":"41075","email":"banakhrf@rcjy.edu.sa;"},{"rank":"Dr.","name":"Sameer Alsibiani","jobTitle":"Assistant Professor","office":"APX-F62","phone":"41000","email":"alsibianis1@rcjy.edu.sa;"},{"rank":"Dr.","name":"Adnan Badawood","jobTitle":"Assistant Professor","office":"ACX F31","phone":"41169","email":"Badawood1@rcjy.edu.sa;"},{"rank":"Eng.","name":"Nafea Alenezi","jobTitle":"Lecturer","office":"ACX-F130","phone":"41435","email":"alenezin@rcjy.edu.sa;"},{"rank":"Dr.","name":"Ali Saad Alghamdi","jobTitle":"Assistant Professor","office":"ACX-F04","phone":"41652","email":"alghamdiasg@rcjy.edu.sa;"},{"rank":"Eng.","name":"Shameer A. Koya","jobTitle":"Lecturer","office":"AD-230","phone":"41432","email":"skoya@rcjy.edu.sa;"},{"rank":"Eng.","name":"Girish Ganpatrao Shirsikar","jobTitle":"Lecturer","office":"APX-F19","phone":"41465","email":"gshirsikar@rcjy.edu.sa;"},{"rank":"Dr.","name":"Mohamed Ibrahim Mosaad","jobTitle":"Associate Professor","office":"ACX-F67","phone":"41596","email":"mosaadm@rcjy.edu.sa;"},{"rank":"Eng.","name":"Umasankar","jobTitle":"Lecturer","office":"APX-F25","phone":"41332","email":"aumasankar@rcjy.edu.sa;"},{"rank":"Dr.","name":"Liaqat Hayat","jobTitle":"Assistant Professor","office":"APX-F16","phone":"41200","email":"Liaqat@rcjy.edu.sa;"},{"rank":"Eng.","name":"Muhammed Kutty K.V.","jobTitle":"Trainer","office":"APX-F31","phone":"41368","email":"kuttym@rcjy.edu.sa;"},{"rank":"Dr.","name":"Nabil Saleh Rousan","jobTitle":"Assistant Professor","office":"ACX-F59","phone":"41248","email":"nrousan@rcjy.edu.sa;"},{"rank":"Eng.","name":"Moneer Almalki","jobTitle":"Lecturer","office":"APX-F56","phone":"NA","email":"malkimon@rcjy.gov.sa"},{"rank":"Eng.","name":"Nasir Ayub","jobTitle":"Trainer","office":"ACX-F138","phone":"41373","email":"nasirayub@rcjy.edu.sa;"},{"rank":"Eng.","name":"Shah Jehan","jobTitle":"Trainer","office":"APX-F65","phone":"41429","email":"shahj@rcjy.edu.sa;"},{"rank":"Eng.","name":"Arif Ali Rehman","jobTitle":"Trainer","office":"ACX-F145","phone":"41337","email":"arehman@rcjy.edu.sa;"},{"rank":"Eng.","name":"Ahmed Bahussain","jobTitle":"Trainer","office":"ACX-F65","phone":"41452","email":"abahussain@rcjy.edu.sa;"},{"rank":"Eng.","name":"Abdullah Fawaz Abdullah","jobTitle":"Trainer","office":"YTI-4F07","phone":"41041","email":"afawaz@rcjy.edu.sa;"},{"rank":"Dr.","name":"Yahya Alfadhli","jobTitle":"Assistant Professor","office":"ACX-F134","phone":"41279","email":"fadhli@rcjy.edu.sa;"},{"rank":"Dr.","name":"Mohammed Ahmed M. Azab","jobTitle":"Associate Professor","office":"ACX-F79","phone":"NA","email":"moustafa@rcjy.edu.sa;"},{"rank":"Dr.","name":"Suresh Kumar","jobTitle":"Assistant Professor","office":"APX-F21","phone":"41227","email":"suresh@rcjy.edu.sa;"},{"rank":"Eng.","name":"Ronilo S. Santos","jobTitle":"Trainer","office":"ACX-F69","phone":"41372","email":"rsantos@rcjy.edu.sa;"},{"rank":"Dr.","name":"Abdalla Younes","jobTitle":"Assistant Professor","office":"ACXF146","phone":"41118","email":"younesa@rcjy.edu.sa;"},{"rank":"Dr.","name":"Ahmed Abdul Aziz Alsubhi","jobTitle":"Associate Professor","office":"ACX-F60","phone":"41377","email":"subhi@rcjy.edu.sa;"},{"rank":"Dr.","name":"Adel Mohammed Alturki","jobTitle":"Assistant Professor","office":"ACX-F78","phone":"41507","email":"alturkia@rcjy.edu.sa;"},{"rank":"Dr.","name":"Annamalai Arunagiri","jobTitle":"Assistant Professor","office":"ACXF76","phone":"41365","email":"arunagiria@rcjy.edu.sa;"},{"rank":"Dr.","name":"Bakur AlQaudi","jobTitle":"Assistant Professor","office":"ACX-F140","phone":"41367","email":"Alqaudib@rcjy.edu.sa;"},{"rank":"Dr.","name":"Mohammed Mostafa","jobTitle":"Assistant Professor","office":"ACX-F129","phone":"41225","email":"merg@rcjy.edu.sa;"},{"rank":"Eng.","name":"John A. Acielo","jobTitle":"Trainer","office":"APX-F61","phone":"41361","email":"jacielo@rcjy.edu.sa;"},{"rank":"Eng.","name":"Ali Al-Nahas","jobTitle":"Lecturer","office":"APX-F24","phone":"41129","email":"aleisa@RCJY.EDU.SA;"},{"rank":"Dr.","name":"Mohammed Mousa","jobTitle":"Assistant Professor","office":"ACX-F63","phone":"41379","email":"mousam1@rcjy.edu.sa;"},{"rank":"Dr.","name":"Salem Mohammed Batiyah","jobTitle":"Assistant Professor","office":"ACX-F70","phone":"41356","email":"batiyahs@rcjy.edu.sa;"},{"rank":"Dr.","name":"Musfer AlRadady","jobTitle":"Assistant Professor","office":"ACX-F 72","phone":"41251","email":"AlRadadym@rcjy.edu.sa;"},{"rank":"Eng.","name":"Zainudin Kornain","jobTitle":"Lecturer","office":"ACX-F77","phone":"41436","email":"kornainz@rcjy.edu.sa;"},{"rank":"Dr.","name":"Ayman Khalid Alhejji","jobTitle":"Associate Professor","office":"APX-F54","phone":"41121","email":"alhejjia@rcjy.edu.sa;"},{"rank":"Eng.","name":"Mohammed Sayed","jobTitle":"Lecturer","office":"APX-F66","phone":"NA","email":"sayedm1@rcjy.edu.sa;"},{"rank":"Dr.","name":"Mohamed Mahfouz","jobTitle":"Assistant Professor","office":"ACXF80","phone":"41427","email":"mahfouzm@rcjy.edu.sa;"},{"rank":"Dr.","name":"Mansour Abdullah Aljohani","jobTitle":"Assistant Professor","office":"ACX-F64","phone":"41030","email":"majohani@rcjy.edu.sa;"},{"rank":"Dr.","name":"Mohammed Hussain Mayyan","jobTitle":"Assistant Professor","office":"APX-F20","phone":"41235","email":"mayyan@rcjy.edu.sa;"},{"rank":"Dr.","name":"Yousuf Dawood Almoallem","jobTitle":"Assistant Professor","office":"ACX-F65","phone":"41632","email":"moallemy@rcjy.edu.sa;"},{"rank":"Dr.","name":"Latif Ismael Shaikh","jobTitle":"Assistant Professor","office":"ACX-F68","phone":"41391","email":"lshaikh@rcjy.edu.sa;"},{"rank":"Eng.","name":"Naushaad V. Moosa","jobTitle":"Lecturer","office":"APX-F32","phone":"41369","email":"moosan@rcjy.edu.sa;"},{"rank":"Eng.","name":"Imran Fazal","jobTitle":"Lecturer","office":"APX F67","phone":"41364","email":"Ifazal@rcjy.edu.sa;"},{"rank":"Dr.","name":"Azzeddine Djaiz","jobTitle":"Assistant Professor","office":"ACX-F82","phone":"41385","email":"adjaiz@rcjy.edu.sa;"},{"rank":"Eng.","name":"Loai Abdullah Al-Aswad","jobTitle":"Trainer","office":"APX-F68","phone":"41474","email":"lalaswad@rcjy.edu.sa;"},{"rank":"Eng.","name":"Almahdi Ali Ababneh","jobTitle":"Lecturer","office":"ACX-F61","phone":"41371","email":"aababneh@rcjy.edu.sa;"},{"rank":"Eng.","name":"Omar Alandejani","jobTitle":"Lecturer","office":"ACX-F144","phone":"41381","email":"oalandejani@rcjy.edu.sa;"},{"rank":"Eng.","name":"Bakheet Al-Ghamdi","jobTitle":"Trainer","office":"APX-F28","phone":"41080","email":"bakheetg@rcjy.edu.sa;"},{"rank":"Eng.","name":"Muath Aloufi","jobTitle":"Trainer","office":"ACX-F81","phone":"NA","email":"aloufim@rcjy.edu.sa;"},{"rank":"Eng.","name":"Turki Alsayed","jobTitle":"Lecturer","office":"ACX-F74","phone":"41363","email":"alsayedt@rcjy.edu.sa;"},{"rank":"Eng.","name":"Shakir Alghamdi","jobTitle":"Lecturer","office":"APX-F18","phone":"41383","email":"shakir@rcjy.edu.sa;"},{"rank":"Eng.","name":"Ashfaq Hussain Chaudhry","jobTitle":"Lecturer","office":"YUC/E1-120","phone":"41447","email":"ashfaq@rcjy.edu.sa;"},{"rank":"Eng.","name":"Ahmed Bakht Sultan","jobTitle":"Trainer","office":"ACX-F59","phone":"41192","email":"sultanba@rcjy.edu.sa;"},{"rank":"Eng.","name":"Ahmed Abdallah Saleh Almalki","jobTitle":"Trainer","office":"APX-F22","phone":"41295","email":"malkiaas@rcjy.edu.sa;"},{"rank":"Eng.","name":"Ahmed Abdulkarim Almuagili albalawi","jobTitle":"Trainer","office":"APX-F29","phone":"NA","email":"almuagiliaa@rcjy.edu.sa;"},{"rank":"Eng.","name":"Ibrahim Salem Al Jehef","jobTitle":"Trainer","office":"APX-F33","phone":"NA","email":"juhaifis@rcjy.edu.sa;"},{"rank":"Eng.","name":"Ahmed Mana Alhashel","jobTitle":"Trainer","office":"APX-F53","phone":"4NA","email":"hashela@rcjy.edu.sa;"},{"rank":"Eng.","name":"Omar Alsalamah","jobTitle":"Trainer","office":"APX-F55","phone":"4NA","email":"Salamhom@rcjy.edu.sa;"}];
@@ -5392,10 +6439,16 @@ document.querySelectorAll('.cell-content').forEach(content => {
             // Add class to optimize column widths
             table.classList.add('columns-optimized');
             
-            // Reflow merged sessions after column changes
+            // Reflow merged sessions after column changes - use multiple timeouts for reliability
             setTimeout(() => {
                 reflowMergedSessions();
-            }, 100);
+            }, 50);
+            setTimeout(() => {
+                reflowMergedSessions();
+            }, 150);
+            setTimeout(() => {
+                reflowMergedSessions();
+            }, 300);
         }
         
         function showAllColumns() {
@@ -5413,10 +6466,16 @@ document.querySelectorAll('.cell-content').forEach(content => {
             
             table.classList.remove('columns-optimized');
             
-            // Reflow merged sessions after column changes
+            // Reflow merged sessions after column changes - use multiple timeouts for reliability
             setTimeout(() => {
                 reflowMergedSessions();
-            }, 100);
+            }, 50);
+            setTimeout(() => {
+                reflowMergedSessions();
+            }, 150);
+            setTimeout(() => {
+                reflowMergedSessions();
+            }, 300);
         }
         
         // Override print functionality to always hide trailing columns
@@ -8155,6 +9214,12 @@ async function exportToPDF() {
     // Add pdf-export-mode class for CSS styling
     document.body.classList.add('pdf-export-mode');
     
+    // Reflow merged sessions to ensure correct widths before capture
+    reflowMergedSessions();
+    
+    // Wait for layout to settle
+    await new Promise(resolve => setTimeout(resolve, 200));
+    
     try {
         // Create PDF in landscape A4
         const pdf = new jsPDF({
@@ -8169,6 +9234,10 @@ async function exportToPDF() {
         for (let container of scheduleContainers) {
             // Update progress
             loadingMsg.innerHTML = `📄 Creating PDF...<br><small style="font-size: 0.8rem; opacity: 0.9;">Processing schedule ${scheduleNum} of ${scheduleContainers.length}</small>`;
+            
+            // Reflow again for each container
+            reflowMergedSessions();
+            await new Promise(resolve => setTimeout(resolve, 100));
             
             // Save original styles and add padding for PDF capture
             const originalPadding = container.style.padding;
