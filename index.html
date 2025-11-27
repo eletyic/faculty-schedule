@@ -3917,6 +3917,296 @@ body {
             }
         }
         
+        /* ========== COMPREHENSIVE MOBILE STYLES ========== */
+        @media screen and (max-width: 992px) {
+            /* Container adjustments */
+            .container {
+                padding: 0.5rem !important;
+                margin: 0 !important;
+                border-radius: 0 !important;
+            }
+            
+            /* Faculty info - stack vertically */
+            .faculty-info {
+                flex-direction: column !important;
+                gap: 0.5rem !important;
+            }
+            
+            .faculty-info > div {
+                flex-direction: column !important;
+                width: 100% !important;
+            }
+            
+            .faculty-info label {
+                min-width: auto !important;
+                margin-bottom: 0.25rem;
+            }
+            
+            .faculty-info input,
+            .faculty-info select {
+                width: 100% !important;
+                font-size: 16px !important; /* Prevents iOS zoom on focus */
+            }
+            
+            /* Course rows - stack vertically */
+            .course-row {
+                flex-direction: column !important;
+                align-items: stretch !important;
+                gap: 0.5rem !important;
+                padding: 0.75rem !important;
+            }
+            
+            .course-row > div {
+                width: 100% !important;
+            }
+            
+            .course-row input {
+                width: 100% !important;
+                font-size: 16px !important;
+            }
+            
+            .course-row button {
+                width: 100% !important;
+                padding: 0.75rem !important;
+            }
+            
+            /* Schedule table wrapper - horizontal scroll */
+            .schedule-table-wrapper {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch;
+                margin: 0 -0.5rem;
+                padding: 0 0.5rem;
+            }
+            
+            /* Schedule table - minimum width for readability */
+            .schedule-table {
+                min-width: 900px !important;
+                font-size: 10px !important;
+            }
+            
+            .schedule-table th,
+            .schedule-table td {
+                padding: 4px 2px !important;
+                min-width: 50px !important;
+            }
+            
+            .schedule-table th.first,
+            .schedule-table td.first {
+                min-width: 40px !important;
+                position: sticky;
+                left: 0;
+                z-index: 20;
+                background: white;
+            }
+            
+            /* Make day column sticky */
+            .day-header {
+                position: sticky !important;
+                left: 0 !important;
+                z-index: 21 !important;
+                background: var(--theme-primary) !important;
+            }
+            
+            /* Cell checkboxes - larger touch targets */
+            .cell-checkbox {
+                width: 24px !important;
+                height: 24px !important;
+                min-width: 24px !important;
+                min-height: 24px !important;
+            }
+            
+            /* Merged teaching content */
+            .merged-teaching {
+                font-size: 9px !important;
+            }
+            
+            .merged-teaching .cell-content > div {
+                font-size: 8px !important;
+            }
+            
+            /* Summary section - stack vertically */
+            .summary-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 0.5rem !important;
+            }
+            
+            /* Footer - stack signatures */
+            .footer > div:first-child {
+                flex-direction: column !important;
+                gap: 1.5rem !important;
+            }
+            
+            .footer > div:first-child > div {
+                width: 100% !important;
+            }
+            
+            /* Signature display - larger touch area */
+            .signature-display {
+                min-height: 50px !important;
+            }
+            
+            /* Signature size slider - larger */
+            .signature-size-inline input[type="range"] {
+                width: 80px !important;
+                height: 8px !important;
+            }
+            
+            .signature-size-inline input[type="range"]::-webkit-slider-thumb {
+                width: 20px !important;
+                height: 20px !important;
+            }
+            
+            /* Modal adjustments */
+            .modal-content {
+                width: 95% !important;
+                max-width: none !important;
+                margin: 1rem !important;
+                max-height: 90vh !important;
+                overflow-y: auto !important;
+            }
+            
+            .signature-modal-content {
+                width: 95% !important;
+            }
+            
+            /* Merge toolbar - full width */
+            #mergeToolbar {
+                width: 95% !important;
+                left: 2.5% !important;
+                right: 2.5% !important;
+                flex-wrap: wrap !important;
+                gap: 0.5rem !important;
+                padding: 0.75rem !important;
+            }
+            
+            #mergeToolbar button {
+                flex: 1 1 45% !important;
+                min-width: 120px !important;
+            }
+            
+            /* iOS buttons - stack on mobile */
+            .ios-button-group {
+                flex-direction: column !important;
+                gap: 0.75rem !important;
+            }
+            
+            .ios-button {
+                width: 100% !important;
+            }
+            
+            /* Legend - wrap items */
+            .legend > div {
+                flex-wrap: wrap !important;
+                gap: 0.5rem 1rem !important;
+            }
+        }
+        
+        /* Extra small screens */
+        @media screen and (max-width: 480px) {
+            .schedule-table {
+                min-width: 800px !important;
+                font-size: 9px !important;
+            }
+            
+            .schedule-table th,
+            .schedule-table td {
+                min-width: 45px !important;
+            }
+            
+            .merged-teaching {
+                font-size: 8px !important;
+                padding: 2px !important;
+            }
+            
+            .btn-cancel {
+                font-size: 10px !important;
+                padding: 2px 4px !important;
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .header {
+                flex-direction: column !important;
+                text-align: center !important;
+                gap: 0.5rem !important;
+            }
+            
+            .header > div {
+                text-align: center !important;
+            }
+        }
+        
+        /* Touch-friendly enhancements */
+        @media (pointer: coarse) {
+            /* Larger touch targets for touch devices */
+            .schedule-cell {
+                min-height: 50px !important;
+            }
+            
+            .cell-checkbox {
+                width: 28px !important;
+                height: 28px !important;
+            }
+            
+            button, 
+            .ios-button,
+            select,
+            input[type="button"],
+            input[type="submit"] {
+                min-height: 44px !important; /* Apple's recommended touch target */
+            }
+            
+            /* Signature canvas - prevent accidental scrolling while drawing */
+            .signature-canvas {
+                touch-action: none !important;
+            }
+            
+            /* Disable hover effects that don't work well on touch */
+            .schedule-cell:hover {
+                background: inherit !important;
+            }
+            
+            .signature-display:hover {
+                background: inherit !important;
+            }
+        }
+        
+        /* Landscape mobile - optimize for wider but shorter screens */
+        @media screen and (max-width: 992px) and (orientation: landscape) {
+            .modal-content {
+                max-height: 85vh !important;
+            }
+            
+            .signature-modal-content {
+                max-height: 80vh !important;
+            }
+            
+            .signature-canvas-container {
+                height: 100px !important;
+            }
+        }
+        
+        /* Mobile scroll indicator for schedule table */
+        @media screen and (max-width: 992px) {
+            .schedule-table-wrapper::after {
+                content: '← Scroll →';
+                display: block;
+                text-align: center;
+                font-size: 11px;
+                color: #888;
+                padding: 0.5rem;
+                background: linear-gradient(to right, rgba(0,0,0,0.05), transparent, rgba(0,0,0,0.05));
+            }
+            
+            /* Hide scroll hint after user has scrolled */
+            .schedule-table-wrapper.scrolled::after {
+                display: none;
+            }
+        }
+        /* ========== END MOBILE STYLES ========== */
+        
         @media print {
             .header {
                 display: flex !important;
@@ -10349,6 +10639,61 @@ function attachFacultyOtherHandler() {
 
 // Call it initially on page load
 attachFacultyOtherHandler();
+
+// ========== MOBILE ENHANCEMENTS ==========
+// Hide scroll hint after user scrolls the schedule table
+document.addEventListener('DOMContentLoaded', function() {
+    const tableWrapper = document.querySelector('.schedule-table-wrapper');
+    if (tableWrapper) {
+        tableWrapper.addEventListener('scroll', function() {
+            this.classList.add('scrolled');
+        }, { once: true });
+    }
+    
+    // Add touch-friendly class to body for touch devices
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+        document.body.classList.add('touch-device');
+    }
+    
+    // Prevent zoom on input focus for iOS (font-size >= 16px handles this in CSS)
+    // But also prevent double-tap zoom on buttons
+    document.querySelectorAll('button, .ios-button').forEach(btn => {
+        btn.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            this.click();
+        });
+    });
+});
+
+// Improve touch scrolling for schedule table
+(function() {
+    let startX, startY, scrollLeft, scrollTop;
+    const wrapper = document.querySelector('.schedule-table-wrapper');
+    
+    if (!wrapper) return;
+    
+    wrapper.addEventListener('touchstart', function(e) {
+        startX = e.touches[0].pageX - wrapper.offsetLeft;
+        startY = e.touches[0].pageY - wrapper.offsetTop;
+        scrollLeft = wrapper.scrollLeft;
+        scrollTop = wrapper.scrollTop;
+    }, { passive: true });
+    
+    wrapper.addEventListener('touchmove', function(e) {
+        if (!startX || !startY) return;
+        
+        const x = e.touches[0].pageX - wrapper.offsetLeft;
+        const y = e.touches[0].pageY - wrapper.offsetTop;
+        const walkX = (x - startX);
+        const walkY = (y - startY);
+        
+        // Horizontal scroll takes priority for the schedule
+        if (Math.abs(walkX) > Math.abs(walkY)) {
+            wrapper.scrollLeft = scrollLeft - walkX;
+        }
+    }, { passive: true });
+})();
+// ========== END MOBILE ENHANCEMENTS ==========
 
 </script>
 
