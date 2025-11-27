@@ -681,6 +681,7 @@
     border: 1px solid #999 !important;
     background: white !important;
     border-radius: 4px !important;
+    text-transform: uppercase !important;
 }
 
 /* Specifically target course inputs with high specificity */
@@ -691,6 +692,12 @@ body.pdf-export-mode input.faculty-input-keep {
     background: white !important;
     border-radius: 4px !important;
     padding: 0.4rem !important;
+    text-transform: uppercase !important;
+}
+
+/* Force uppercase on all inputs in footer section during PDF export */
+body.pdf-export-mode .footer input {
+    text-transform: uppercase !important;
 }
 
 /* iOS Button Color Variants */
