@@ -520,10 +520,20 @@
         display: none !important;
     }
     
-    /* Hide all input fields */
-    input[type="text"],
-    input[type="number"],
-    select,
+    /* Keep borders on faculty/course inputs for print - MUST come first */
+    select.course-code-input,
+    select.faculty-input-keep,
+    input.course-name-input,
+    input.faculty-input-keep {
+        border: 1px solid #999 !important;
+        background: white !important;
+        border-radius: 4px !important;
+    }
+    
+    /* Hide all input fields - but keep borders on faculty inputs */
+    input[type="text"]:not(.faculty-input-keep):not(.course-name-input),
+    input[type="number"]:not(.faculty-input-keep),
+    select:not(.course-code-input):not(.faculty-input-keep),
     textarea {
         border: none !important;
         background: transparent !important;
@@ -658,6 +668,32 @@
 .pdf-export-mode .session-length-selector,
 .pdf-export-mode .merged-teaching .btn-cancel {
     display: none !important;
+}
+
+/* Ensure course inputs show borders during PDF export */
+.pdf-export-mode .course-row input,
+.pdf-export-mode .course-row select,
+.pdf-export-mode .course-code-input,
+.pdf-export-mode .course-code-custom,
+.pdf-export-mode .course-name-input,
+.pdf-export-mode .faculty-info input,
+.pdf-export-mode .faculty-info select,
+.pdf-export-mode select.course-code-input,
+.pdf-export-mode input.course-name-input {
+    border: 1px solid #999 !important;
+    background: white !important;
+    border-radius: 4px !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+}
+
+/* Specifically target the course code select dropdown */
+body.pdf-export-mode .course-row select.course-code-input,
+body.pdf-export-mode select.course-code-input.faculty-input-keep {
+    border: 1px solid #999 !important;
+    background: white !important;
+    border-radius: 4px !important;
+    padding: 0.4rem !important;
 }
 
 /* iOS Button Color Variants */
@@ -1142,7 +1178,7 @@ body {
     background: #f8f9fa;
     padding: 1.5rem;
     text-align: center;
-    color: #666;
+    color: var(--theme-primary);
     font-size: 0.9rem;
     border-top: 1px solid #e0e0e0;
 }
@@ -1187,254 +1223,129 @@ body {
 }
 
 /* ========== MULTIPLE SCHEDULE PAGE STYLES ========== */
-.multiple-schedule-page {
-    max-width: 100%;
-    width: 100%;
-    margin: 0;
+/* User Guide Page */
+.user-guide-page {
+    max-width: 1000px;
+    margin: 0 auto;
     background: white;
     padding: 2rem;
-    box-shadow: none;
-    border-radius: 0;
+    min-height: 100vh;
 }
 
-.multiple-schedule-page h1 {
+.user-guide-page h1 {
     color: var(--theme-primary);
     font-size: 2rem;
     margin-bottom: 1.5rem;
     text-align: center;
+    border-bottom: 3px solid var(--theme-accent);
+    padding-bottom: 1rem;
 }
 
-.back-button {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
+.guide-section {
+    background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid var(--theme-primary);
+    box-shadow: 0 2px 8px rgba(5, 41, 118, 0.08);
+}
+
+.guide-section h2 {
+    color: var(--theme-primary);
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.guide-section h3 {
+    color: var(--theme-secondary);
+    font-size: 1.1rem;
+    margin: 1rem 0 0.5rem 0;
+}
+
+.guide-section p, .guide-section li {
+    color: #444;
+    line-height: 1.7;
+    margin-bottom: 0.5rem;
+}
+
+.guide-section ul {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.guide-section ol {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.guide-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.guide-step-number {
     background: var(--theme-primary);
     color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
-    transition: all 0.3s ease;
-}
-
-.back-button:hover {
-    background: var(--theme-secondary);
-    transform: translateX(-5px);
-}
-
-.upload-section {
-    background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
-    padding: 2.5rem;
-    border-radius: 12px;
-    margin-bottom: 2rem;
-    border: 3px solid var(--theme-primary);
-    box-shadow: 0 4px 15px rgba(5, 41, 118, 0.1);
-}
-
-.upload-section h2 {
-    color: var(--theme-primary);
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    font-weight: bold;
-}
-
-.template-download {
-    display: inline-block;
-    padding: 1rem 2rem;
-    background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-secondary) 100%);
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    border: none;
-    box-shadow: 0 4px 12px rgba(5, 41, 118, 0.2);
-}
-
-.template-download:hover {
-    background: linear-gradient(135deg, var(--theme-secondary) 0%, var(--theme-primary) 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(5, 41, 118, 0.3);
-}
-
-.file-upload-container {
-    margin-top: 1.5rem;
-}
-
-.file-upload-label {
-    display: inline-block;
-    padding: 1rem 2rem;
-    background: linear-gradient(135deg, var(--theme-accent) 0%, #17a05f 100%);
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(32, 206, 118, 0.2);
-}
-
-.file-upload-label:hover {
-    background: linear-gradient(135deg, #17a05f 0%, var(--theme-accent) 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(32, 206, 118, 0.3);
-}
-
-#excelFileInput {
-    display: none;
-}
-
-.file-name {
-    display: inline-block;
-    margin-left: 1rem;
-    color: var(--theme-primary);
-    font-style: italic;
-    font-weight: 600;
-}
-
-/* Loading spinner */
-.loading-spinner {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    border-top-color: white;
-    animation: spin 0.8s linear infinite;
-    margin-left: 10px;
-    vertical-align: middle;
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
-.processing {
-    position: relative;
-    pointer-events: none;
-    opacity: 0.7;
-}
-
-.process-button {
-    display: block;
-    width: 100%;
-    padding: 1.2rem 2rem;
-    background: linear-gradient(135deg, var(--theme-accent) 0%, #17a05f 100%);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-top: 1.5rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(32, 206, 118, 0.3);
-}
-
-.process-button:hover {
-    background: linear-gradient(135deg, #17a05f 0%, var(--theme-accent) 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(32, 206, 118, 0.4);
-}
-
-.process-button:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-.schedules-container {
-    margin-top: 2rem;
-    width: 100%;
-    max-width: 100%;
-}
-
-.schedule-item {
-    margin-bottom: 3rem;
-    page-break-after: always;
-    width: 100%;
-    max-width: 100%;
-}
-
-.error-message {
-    background: linear-gradient(135deg, #ffe6e6 0%, #fff5f5 100%);
-    color: #cc0000;
-    padding: 1.2rem;
-    border-radius: 8px;
-    margin-top: 1rem;
-    border-left: 4px solid #cc0000;
-    box-shadow: 0 2px 8px rgba(204, 0, 0, 0.1);
-    animation: slideInLeft 0.5s ease;
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;
 }
 
-.error-message::before {
-    content: '⚠️';
-    font-size: 1.5rem;
+.guide-step-content {
+    flex: 1;
 }
 
-.success-message {
-    background: linear-gradient(135deg, #e6ffe6 0%, #f5fff5 100%);
-    color: #006600;
-    padding: 1.2rem;
-    border-radius: 8px;
-    margin-top: 1rem;
+.keyboard-shortcut {
+    display: inline-block;
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-family: monospace;
+    font-size: 0.9rem;
+    margin: 0 2px;
+}
+
+.tip-box {
+    background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
     border-left: 4px solid var(--theme-accent);
-    box-shadow: 0 2px 8px rgba(32, 206, 118, 0.1);
-    animation: slideInLeft 0.5s ease;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    padding: 1rem;
+    border-radius: 0 8px 8px 0;
+    margin: 1rem 0;
 }
 
-.success-message::before {
-    content: '✓';
-    font-size: 1.5rem;
+.tip-box::before {
+    content: '💡 Tip: ';
     font-weight: bold;
-    background: var(--theme-accent);
-    color: white;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    color: var(--theme-accent);
 }
 
-/* Scroll to top button */
-.scroll-top-button {
-    position: fixed;
-    bottom: 2rem;
-    left: 2rem;
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(135deg, var(--theme-accent) 0%, #17a05f 100%);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1.5rem;
-    box-shadow: 0 6px 20px rgba(32, 206, 118, 0.4);
-    transition: all 0.3s ease;
-    z-index: 999;
-    display: none;
-    align-items: center;
-    justify-content: center;
+.warning-box {
+    background: linear-gradient(135deg, #fff3e0 0%, #fff8e1 100%);
+    border-left: 4px solid #ff9800;
+    padding: 1rem;
+    border-radius: 0 8px 8px 0;
+    margin: 1rem 0;
 }
 
-.scroll-top-button.visible {
-    display: flex;
-    animation: fadeIn 0.3s ease;
-}
-
-.scroll-top-button:hover {
-    background: linear-gradient(135deg, #17a05f 0%, var(--theme-accent) 100%);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(32, 206, 118, 0.5);
+.warning-box::before {
+    content: '⚠️ Note: ';
+    font-weight: bold;
+    color: #ff9800;
 }
 
 
@@ -3658,11 +3569,10 @@ body {
     
     <!-- Main Content -->
     <div class="landing-content">
-        <div class="section-title">Choose Your Scheduling Method</div>
         <div class="button-container">
             <div class="option-button" onclick="showIndividualSchedule()">
                 <div class="icon">
-                    <svg width="80" height="80" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="60" height="60" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                         <rect x="15" y="20" width="70" height="65" rx="5" fill="#052976" opacity="0.1"/>
                         <rect x="15" y="15" width="70" height="70" rx="5" fill="none" stroke="#052976" stroke-width="3"/>
                         <line x1="30" y1="15" x2="30" y2="25" stroke="#20CE76" stroke-width="3" stroke-linecap="round"/>
@@ -3677,30 +3587,27 @@ body {
                         <rect x="25" y="69" width="12" height="10" rx="2" fill="#052976"/>
                     </svg>
                 </div>
-                <h2>Individual Schedule</h2>
+                <h2>Build Schedule</h2>
                 <p>Create a single faculty member's schedule with an interactive drag-and-drop interface. Perfect for quick edits and real-time updates.</p>
                 <span class="feature-badge">Interactive Builder</span>
             </div>
-            <div class="option-button" onclick="showMultipleSchedule()">
+            <div class="option-button" onclick="showUserGuide()">
                 <div class="icon">
-                    <svg width="80" height="80" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="10" y="25" width="30" height="50" rx="3" fill="#052976" opacity="0.8"/>
-                        <rect x="45" y="35" width="30" height="40" rx="3" fill="#20CE76" opacity="0.8"/>
-                        <rect x="80" y="15" width="10" height="60" rx="3" fill="#052976" opacity="0.6"/>
-                        <circle cx="25" cy="85" r="3" fill="#052976"/>
-                        <circle cx="40" cy="85" r="3" fill="#052976"/>
-                        <circle cx="60" cy="85" r="3" fill="#20CE76"/>
-                        <circle cx="75" cy="85" r="3" fill="#20CE76"/>
-                        <circle cx="85" cy="85" r="3" fill="#052976"/>
-                        <line x1="15" y1="60" x2="35" y2="60" stroke="white" stroke-width="2"/>
-                        <line x1="15" y1="50" x2="35" y2="50" stroke="white" stroke-width="2"/>
-                        <line x1="50" y1="55" x2="70" y2="55" stroke="white" stroke-width="2"/>
-                        <line x1="50" y1="65" x2="70" y2="65" stroke="white" stroke-width="2"/>
+                    <svg width="60" height="60" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="20" y="10" width="60" height="75" rx="4" fill="#052976" opacity="0.1"/>
+                        <rect x="20" y="10" width="60" height="75" rx="4" fill="none" stroke="#052976" stroke-width="3"/>
+                        <line x1="30" y1="25" x2="70" y2="25" stroke="#052976" stroke-width="3" stroke-linecap="round"/>
+                        <line x1="30" y1="38" x2="65" y2="38" stroke="#20CE76" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="30" y1="48" x2="60" y2="48" stroke="#20CE76" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="30" y1="58" x2="55" y2="58" stroke="#20CE76" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="30" y1="68" x2="50" y2="68" stroke="#20CE76" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="72" cy="78" r="12" fill="#20CE76"/>
+                        <text x="72" y="83" text-anchor="middle" fill="white" font-size="16" font-weight="bold">?</text>
                     </svg>
                 </div>
-                <h2>Multiple Schedules</h2>
-                <p>Upload an Excel file to generate schedules for multiple faculty members at once. Ideal for bulk operations and semester planning.</p>
-                <span class="feature-badge">Batch Processing</span>
+                <h2>User Guide</h2>
+                <p>Learn how to use the Faculty Schedule System effectively. Step-by-step instructions, tips, and keyboard shortcuts.</p>
+                <span class="feature-badge">Documentation</span>
             </div>
         </div>
     </div>
@@ -3803,7 +3710,7 @@ body {
 <div class="department-info">
 <div class="department-row">
 <label for="departmentSelect">Department:</label>
-<select id="departmentSelect" onchange="updateDepartmentDisplay()">
+<select id="departmentSelect" class="faculty-input-keep" onchange="updateDepartmentDisplay()">
 <option value="Chemical Engineering">Chemical Engineering</option>
 <option value="Computer Science and Engineering">Computer Science and Engineering</option>
 <option selected="" value="Electrical Engineering">Electrical Engineering</option>
@@ -3812,17 +3719,17 @@ body {
 </select>
 
 <label for="semesterType" style="margin-left: 1.5rem;">Semester:</label>
-<select id="semesterType" onchange="updateSemesterDisplay()" style="padding: 0.5rem 0.9375rem; border: none; font-size: 0.875rem; border-radius: 5px; background: white; font-weight: bold; color: #1F618D; cursor: pointer; min-width: 200px;">
+<select id="semesterType" class="faculty-input-keep" onchange="updateSemesterDisplay()" style="padding: 0.5rem 0.9375rem; border: none; font-size: 0.875rem; border-radius: 5px; background: white; font-weight: bold; color: #1F618D; cursor: pointer; min-width: 200px;">
 <option value="First">First Semester</option>
 <option value="Second">Second Semester</option>
 <option value="Summer">Summer Semester</option>
 </select>
 
 <label for="hijriYear" style="margin-left: 1.5rem;">Hijri Year:</label>
-<input id="hijriYear" onchange="updateSemesterDisplay()" placeholder="e.g., 1446" type="text" style="padding: 0.5rem 0.9375rem; border: none; font-size: 0.875rem; border-radius: 5px; background: white; font-weight: bold; color: #1F618D; width: 120px;"/>
+<input id="hijriYear" class="faculty-input-keep" onchange="updateSemesterDisplay()" placeholder="e.g., 1446" type="text" style="padding: 0.5rem 0.9375rem; border: none; font-size: 0.875rem; border-radius: 5px; background: white; font-weight: bold; color: #1F618D; width: 120px;"/>
 
 <label for="gregorianCode" style="margin-left: 1.5rem;">TERM CODE:</label>
-<input id="gregorianCode" onchange="updateSemesterDisplay()" placeholder="e.g., 471" type="text" style="padding: 0.5rem 0.9375rem; border: none; font-size: 0.875rem; border-radius: 5px; background: white; font-weight: bold; color: #1F618D; width: 100px;"/>
+<input id="gregorianCode" class="faculty-input-keep" onchange="updateSemesterDisplay()" placeholder="e.g., 471" type="text" style="padding: 0.5rem 0.9375rem; border: none; font-size: 0.875rem; border-radius: 5px; background: white; font-weight: bold; color: #1F618D; width: 100px;"/>
 
 <button class="btn-auto-year" onclick="autoSetYears()" style="margin-left: 1.5rem;">🔄 Auto Set Current Years</button>
 </div>
@@ -4337,10 +4244,10 @@ body {
             }
         }
         
-        // Load saved theme on page load
+        // Load saved theme on page load - Always default to Navy
         function loadSavedTheme() {
-            const savedTheme = localStorage.getItem('rcjy-schedule-theme') || 'navy';
-            setTheme(savedTheme);
+            // Always start with Navy theme
+            setTheme('navy');
         }
         
         // Close theme panel when clicking outside
@@ -4406,96 +4313,12 @@ body {
             courseLabel.style.cssText = 'font-weight: bold; font-size: 0.8125rem; min-width: 90px;';
             courseLabel.className = 'course-number-label';
             
-            // Check current department
-            const department = document.getElementById('departmentSelect').value;
-            const isElectrical = department === 'Electrical Engineering';
-            
-            let codeInput;
-            let codeWrapper;
-            
-            if (isElectrical) {
-                // Create wrapper div for selector + custom input (no pen button)
-                codeWrapper = document.createElement('div');
-                codeWrapper.style.cssText = 'position: relative; width: 120px;';
-                
-                // Course code dropdown for Electrical Engineering
-                codeInput = document.createElement('select');
-                codeInput.className = 'course-code-input faculty-input-keep';
-                codeInput.style.cssText = 'padding: 0.4rem; font-size: 0.8125rem; border: 1px solid #999; width: 100%;';
-                
-                // Add default option
-                const defaultOption = document.createElement('option');
-                defaultOption.value = '';
-                defaultOption.textContent = '-- Select Code --';
-                codeInput.appendChild(defaultOption);
-                
-                // Add "Other" option
-                const otherOption = document.createElement('option');
-                otherOption.value = '__OTHER__';
-                otherOption.textContent = 'Other... (Custom)';
-                codeInput.appendChild(otherOption);
-                
-                // Add all course codes
-                coursesData.forEach(course => {
-                    const option = document.createElement('option');
-                    option.value = course.code;
-                    option.textContent = course.code;
-                    option.dataset.courseName = course.name;
-                    codeInput.appendChild(option);
-                });
-                
-                // Create custom input (hidden by default)
-                const customInput = document.createElement('input');
-                customInput.type = 'text';
-                customInput.placeholder = 'Type code...';
-                customInput.className = 'course-code-custom faculty-input-keep';
-                customInput.style.cssText = 'padding: 0.4rem; font-size: 0.8125rem; border: 1px solid #999; width: 100%; display: none;';
-                
-                // Handle "Other" selection
-                codeInput.addEventListener('change', function() {
-                    if (this.value === '__OTHER__') {
-                        // Show custom input, hide dropdown
-                        codeInput.style.display = 'none';
-                        customInput.style.display = 'block';
-                        customInput.focus();
-                        customInput.value = '';
-                    }
-                });
-                
-                // Handle returning to dropdown from custom input
-                customInput.addEventListener('blur', function() {
-                    // If user clicked away without typing, go back to dropdown
-                    if (this.value.trim() === '') {
-                        this.style.display = 'none';
-                        codeInput.style.display = 'block';
-                        codeInput.value = '';
-                    }
-                });
-                
-                // Allow Escape to return to dropdown
-                customInput.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape') {
-                        this.style.display = 'none';
-                        this.value = '';
-                        codeInput.style.display = 'block';
-                        codeInput.value = '';
-                        codeInput.focus();
-                    }
-                });
-                
-                codeWrapper.appendChild(codeInput);
-                codeWrapper.appendChild(customInput);
-                
-                // Store wrapper reference
-                codeInput.parentWrapper = codeWrapper;
-            } else {
-                // Course code text input for other departments
-                codeInput = document.createElement('input');
-                codeInput.type = 'text';
-                codeInput.placeholder = 'Course Code';
-                codeInput.className = 'course-code-input faculty-input-keep';
-                codeInput.style.cssText = 'padding: 0.4rem; font-size: 0.8125rem; border: 1px solid #999; width: 120px;';
-            }
+            // Course code text input (same for all departments)
+            const codeInput = document.createElement('input');
+            codeInput.type = 'text';
+            codeInput.placeholder = 'Course Code';
+            codeInput.className = 'course-code-input faculty-input-keep';
+            codeInput.style.cssText = 'padding: 0.4rem; font-size: 0.8125rem; border: 1px solid #999; width: 120px; text-transform: uppercase;';
             
             // Course name input (inline, no label)
             const nameInput = document.createElement('input');
@@ -4504,19 +4327,33 @@ body {
             nameInput.className = 'course-name-input faculty-input-keep';
             nameInput.style.cssText = 'padding: 0.4rem; font-size: 0.8125rem; border: 1px solid #999; flex: 1;';
             
+            // Build course code to name mapping from coursesData
+            const courseMapping = {};
+            coursesData.forEach(course => {
+                courseMapping[course.code.toUpperCase()] = course.name;
+            });
             
-            // Add change event to auto-fill course name (only for dropdown)
-            if (isElectrical) {
-                codeInput.addEventListener('change', function() {
-                    const selectedOption = this.options[this.selectedIndex];
-                    if (selectedOption.dataset.courseName) {
-                        nameInput.value = selectedOption.dataset.courseName;
-                    } else {
-                        nameInput.value = '';
-                    }
-                    updateCalculations();
-                });
-            }
+            // Auto-fill course name when code is entered (hidden mapping)
+            // If code not found, leave name blank
+            codeInput.addEventListener('input', function() {
+                const code = this.value.trim().toUpperCase();
+                if (courseMapping[code]) {
+                    nameInput.value = courseMapping[code];
+                } else {
+                    nameInput.value = '';
+                }
+                updateCalculations();
+            });
+            
+            // Also check on blur (when user finishes typing)
+            codeInput.addEventListener('blur', function() {
+                const code = this.value.trim().toUpperCase();
+                if (courseMapping[code]) {
+                    nameInput.value = courseMapping[code];
+                } else {
+                    nameInput.value = '';
+                }
+            });
             
             // Remove button
             const removeBtn = document.createElement('button');
@@ -4534,7 +4371,7 @@ body {
             };
             
             row.appendChild(courseLabel);
-            row.appendChild(codeInput.parentWrapper || codeInput);
+            row.appendChild(codeInput);
             row.appendChild(nameInput);
             row.appendChild(removeBtn);
             
@@ -7074,9 +6911,9 @@ document.querySelectorAll('.cell-content').forEach(content => {
             let contentHTML = '';
             if (s.activityType === 'TEACHING') {
                 contentHTML = `
-                    <div style="font-size: 11px; font-weight: bold;">${s.courseCode}</div>
-                    <div style="font-size: 9px;">${s.type}${s.section ? ' - ' + s.section : ''}</div>
-                    <div style="font-size: 9px;">${s.location}</div>
+                    <div style="font-size: 11px; font-weight: bold; text-transform: uppercase;">${s.courseCode}</div>
+                    <div style="font-size: 9px; text-transform: uppercase;">${s.type}${s.section ? ' - ' + s.section : ''}</div>
+                    <div style="font-size: 9px; text-transform: uppercase;">${s.location}</div>
                 `;
             } else if (s.activityType === 'OH') {
                 const ohLabel = length === 1 ? 'OH' : 'OFFICE HOURS';
@@ -8073,7 +7910,7 @@ document.addEventListener('change', function(e) {
 </div>
 
 <!-- ========== MULTIPLE SCHEDULE PAGE ========== -->
-<div class="page-container multiple-schedule-page" id="multipleSchedulePage">
+<div class="page-container user-guide-page" id="userGuidePage">
     <div style="position: fixed; top: 20px; left: 20px; z-index: 999;">
         <button class="ios-button ios-button-gray" onclick="showLandingPage()">
             <div class="ios-button-icon">
@@ -8083,40 +7920,156 @@ document.addEventListener('change', function(e) {
         </button>
     </div>
     
-    <h1>Multiple Faculty Schedules</h1>
+    <h1>📖 Faculty Schedule System - User Guide</h1>
     
-    <!-- Generator Section - Centered with max-width -->
-    <div style="max-width: 1200px; margin: 0 auto;">
-        <div class="upload-section">
-            <h2>Step 1: Download Template</h2>
-            <p>Download the Excel template below, fill it with faculty schedule data, and upload it back here.</p>
-            <button class="template-download" onclick="downloadTemplate()">📥 Download Excel Template</button>
-            
-            <h2>Step 2: Upload Filled Template</h2>
-            <div class="file-upload-container">
-                <label for="excelFileInput" class="file-upload-label">
-                    📤 Choose Excel File
-                </label>
-                <input type="file" id="excelFileInput" accept=".xlsx, .xls" onchange="handleFileSelect(event)">
-                <span class="file-name" id="fileName">No file selected</span>
+    <!-- Getting Started -->
+    <div class="guide-section">
+        <h2>🚀 Getting Started</h2>
+        <p>Welcome to the Faculty Schedule System. This guide will help you create and manage faculty schedules efficiently.</p>
+        
+        <div class="guide-step">
+            <div class="guide-step-number">1</div>
+            <div class="guide-step-content">
+                <strong>Select Faculty Information</strong>
+                <p>Choose the faculty member from the dropdown or select "Other" to enter a custom name. Fill in rank, office, phone, and email details.</p>
             </div>
-            
-            <button class="process-button" id="processBtn" onclick="processExcelFile()" disabled>
-                Generate Schedules
-            </button>
         </div>
         
-        <div id="messageContainer"></div>
+        <div class="guide-step">
+            <div class="guide-step-number">2</div>
+            <div class="guide-step-content">
+                <strong>Add Courses</strong>
+                <p>Click "Add Course" to add courses to the faculty's load. Select from the predefined list or enter custom course codes.</p>
+            </div>
+        </div>
+        
+        <div class="guide-step">
+            <div class="guide-step-number">3</div>
+            <div class="guide-step-content">
+                <strong>Schedule Activities</strong>
+                <p>Click on any cell in the schedule grid to open the scheduling modal. Choose the activity type and fill in the required details.</p>
+            </div>
+        </div>
     </div>
     
-    <!-- Schedules Container - Full Width -->
-    <div class="schedules-container" id="schedulesContainer" style="width: 100%; max-width: 100%;">
-        <!-- Generated schedules will be inserted here -->
+    <!-- Activity Types -->
+    <div class="guide-section">
+        <h2>📚 Activity Types</h2>
+        
+        <h3>Teaching Activities</h3>
+        <ul>
+            <li><strong>LEC (Lecture)</strong> - Regular classroom lectures</li>
+            <li><strong>LAB (Laboratory)</strong> - Hands-on lab sessions</li>
+            <li><strong>TUT (Tutorial)</strong> - Small group tutorial sessions</li>
+        </ul>
+        
+        <h3>Other Activities</h3>
+        <ul>
+            <li><strong>OH (Office Hours)</strong> - Student consultation time</li>
+            <li><strong>CH (Compensated Hours)</strong> - Hours compensated for other duties</li>
+            <li><strong>NS (Non-Scheduled)</strong> - Reserved non-scheduled time</li>
+            <li><strong>BREAK</strong> - Break periods</li>
+            <li><strong>ACTIVITY</strong> - Committee meetings and other activities (PC, PAEC, DAC, etc.)</li>
+        </ul>
     </div>
     
-    <button class="scroll-top-button" id="scrollTopBtn" onclick="scrollToTop()">
-        ↑
-    </button>
+    <!-- Batch Selection -->
+    <div class="guide-section">
+        <h2>✅ Batch Cell Selection</h2>
+        <p>Schedule multiple sessions of the same course quickly using batch selection:</p>
+        
+        <div class="guide-step">
+            <div class="guide-step-number">1</div>
+            <div class="guide-step-content">
+                <strong>Open Scheduling Modal</strong>
+                <p>Click any cell and fill in course details (code, type, location).</p>
+            </div>
+        </div>
+        
+        <div class="guide-step">
+            <div class="guide-step-number">2</div>
+            <div class="guide-step-content">
+                <strong>Select Duration & Repetitions</strong>
+                <p>Choose session length (1-5 hours) and how many times to schedule.</p>
+            </div>
+        </div>
+        
+        <div class="guide-step">
+            <div class="guide-step-number">3</div>
+            <div class="guide-step-content">
+                <strong>Select Cells</strong>
+                <p>Checkboxes appear on available cells. Click to select the starting cell for each session. Use auto-extend for multi-hour sessions.</p>
+            </div>
+        </div>
+        
+        <div class="tip-box">
+            Hold <span class="keyboard-shortcut">Shift</span> while clicking to quickly select multiple cells in sequence.
+        </div>
+    </div>
+    
+    <!-- Themes -->
+    <div class="guide-section">
+        <h2>🎨 Themes</h2>
+        <p>Customize the appearance with 7 professional color themes:</p>
+        <ul>
+            <li><strong>Navy</strong> - Default RCJY theme</li>
+            <li><strong>Cyan</strong> - Fresh teal tones</li>
+            <li><strong>Green</strong> - Nature-inspired</li>
+            <li><strong>Blue</strong> - Classic blue</li>
+            <li><strong>Purple</strong> - Elegant purple</li>
+            <li><strong>Gold</strong> - Warm gold accents</li>
+            <li><strong>Cream</strong> - Classic cream/brown</li>
+        </ul>
+        <p>Access themes via the floating menu (▼ button) → Theme option.</p>
+    </div>
+    
+    <!-- PDF Export -->
+    <div class="guide-section">
+        <h2>📄 PDF Export</h2>
+        <p>Generate professional PDF documents of the schedule:</p>
+        
+        <div class="guide-step">
+            <div class="guide-step-number">1</div>
+            <div class="guide-step-content">
+                <strong>Lock the Schedule</strong>
+                <p>Click the 🔒 Lock button in the floating menu to finalize the schedule.</p>
+            </div>
+        </div>
+        
+        <div class="guide-step">
+            <div class="guide-step-number">2</div>
+            <div class="guide-step-content">
+                <strong>Export to PDF</strong>
+                <p>Click "Export to PDF" to generate and download the schedule document.</p>
+            </div>
+        </div>
+        
+        <div class="warning-box">
+            Make sure all required fields are filled before exporting. The acknowledgment section requires signatures.
+        </div>
+    </div>
+    
+    <!-- Keyboard Shortcuts -->
+    <div class="guide-section">
+        <h2>⌨️ Keyboard Shortcuts</h2>
+        <ul>
+            <li><span class="keyboard-shortcut">Escape</span> - Close modals and cancel operations</li>
+            <li><span class="keyboard-shortcut">Enter</span> - Confirm/Save in modals</li>
+            <li><span class="keyboard-shortcut">Shift + Click</span> - Multi-select cells in batch mode</li>
+        </ul>
+    </div>
+    
+    <!-- Tips -->
+    <div class="guide-section">
+        <h2>💡 Pro Tips</h2>
+        <ul>
+            <li>Use the "Transfer Knowledge" checkbox for sessions involving knowledge transfer between faculty.</li>
+            <li>The summary section automatically calculates total teaching hours, office hours, and workload.</li>
+            <li>All changes are preserved in the browser - refresh won't lose your work within a session.</li>
+            <li>Click on any merged cell to edit or delete it.</li>
+            <li>The schedule follows a Sun-Thu week with 16 time slots per day.</li>
+        </ul>
+    </div>
 </div>
 
 <script>
@@ -8124,592 +8077,22 @@ document.addEventListener('change', function(e) {
 function showLandingPage() {
     document.getElementById('landingPage').classList.add('active');
     document.getElementById('individualSchedulePage').classList.remove('active');
-    document.getElementById('multipleSchedulePage').classList.remove('active');
+    document.getElementById('userGuidePage').classList.remove('active');
 }
 
 function showIndividualSchedule() {
     document.getElementById('landingPage').classList.remove('active');
     document.getElementById('individualSchedulePage').classList.add('active');
-    document.getElementById('multipleSchedulePage').classList.remove('active');
+    document.getElementById('userGuidePage').classList.remove('active');
 }
 
-function showMultipleSchedule() {
+function showUserGuide() {
     document.getElementById('landingPage').classList.remove('active');
     document.getElementById('individualSchedulePage').classList.remove('active');
-    document.getElementById('multipleSchedulePage').classList.add('active');
+    document.getElementById('userGuidePage').classList.add('active');
 }
 
-// ========== EXCEL TEMPLATE & PROCESSING ==========
-function downloadTemplate() {
-    const wb = XLSX.utils.book_new();
-    
-    // Instructions sheet
-    const instructionsData = [
-        ['FACULTY SCHEDULE TEMPLATE - INSTRUCTIONS'],
-        [''],
-        ['How to use this template:'],
-        ['1. Fill in the SCHEDULE DATA sheet with faculty information'],
-        ['2. Each row represents one faculty member'],
-        [''],
-        ['FACULTY INFORMATION COLUMNS:'],
-        ['- RANK: Academic rank (e.g., Dr., Eng., Prof.)'],
-        ['- FACULTY NAME: Full name (must match faculty database)'],
-        ['- EMAIL: Email address'],
-        ['- OFFICE: Office location code'],
-        ['- PHONE: Phone number or extension'],
-        [''],
-        ['COURSE INFORMATION:'],
-        ['- Up to 5 courses per faculty member'],
-        ['- COURSE X CODE: Course code (e.g., ELET101, EE 304)'],
-        ['- COURSE X NAME: Full course name'],
-        ['- Leave empty if fewer than 5 courses'],
-        [''],
-        ['SCHEDULE CELLS (After course columns):'],
-        ['3. For schedule cells, use the format: COURSECODE|TYPE|LOCATION|SESSION_LENGTH'],
-        ['   - Example: ELET101|LEC|A/3-120B|1 or ELET101|LAB|A/3-201|2'],
-        ['   - Valid types: LEC, LAB, TUT'],
-        ['   - Session length: 1, 2, or 3 (hours)'],
-        ['4. Leave cells empty if no class is scheduled'],
-        ['5. Days: SUN, MON, TUE, WED, THU'],
-        ['6. Time slots: 07:15-08:05, 08:15-09:05, 09:15-10:05, 10:15-11:05, 11:15-12:05, 12:15-13:05,'],
-        ['   13:15-14:05, 14:15-15:05, 15:15-16:05, 16:15-17:05, 17:15-18:05, 18:15-19:05,'],
-        ['   19:15-20:05, 20:15-21:05, 21:15-22:05, 22:15-23:05'],
-        ['7. Session length is the LAST number: 1, 2, or 3 hours (how many time slots to merge)'],
-        ['8. ONLY fill the FIRST cell of a multi-hour session, leave the next cells EMPTY'],
-        ['9. Save the file and upload it back to the system'],
-        [''],
-        ['Example schedule cell formats:'],
-        ['ELET101|LEC|A/3-120B|1    <- Single hour class (no merge)'],
-        ['ELET101|LEC|A/3-120B|2    <- Two hour class (merges 2 cells)'],
-        ['ELET101|LAB|A/3-201|3     <- Three hour class (merges 3 cells)'],
-        [''],
-        ['IMPORTANT: Only put the course data in the FIRST time slot.'],
-        ['If a class is 2 hours starting at 08:15, ONLY fill SUN 08:15-09:05 with the data.'],
-        ['Leave SUN 09:15-10:05 EMPTY. The system will merge them automatically!'],
-        [''],
-        ['EXAMPLE ROW:'],
-        ['Dr. | Ali Saad Alghamdi | alghamdiasg@rcjy.edu.sa | ACX-F04 | 41652 | ELET101 | Electric Circuit I | ELET105 | Electronics I | ...']
-    ];
-    
-    const instructionsSheet = XLSX.utils.aoa_to_sheet(instructionsData);
-    XLSX.utils.book_append_sheet(wb, instructionsSheet, 'INSTRUCTIONS');
-    
-    // Create schedule data sheet with correct time slots
-    const days = ['SUN', 'MON', 'TUE', 'WED', 'THU'];
-    const times = [
-        '07:15-08:05', '08:15-09:05', '09:15-10:05', '10:15-11:05',
-        '11:15-12:05', '12:15-13:05', '13:15-14:05', '14:15-15:05',
-        '15:15-16:05', '16:15-17:05', '17:15-18:05', '18:15-19:05',
-        '19:15-20:05', '20:15-21:05', '21:15-22:05', '22:15-23:05'
-    ];
-    
-    const headerRow = [
-        'RANK', 'FACULTY NAME', 'EMAIL', 'OFFICE', 'PHONE',
-        'COURSE 1 CODE', 'COURSE 1 NAME',
-        'COURSE 2 CODE', 'COURSE 2 NAME',
-        'COURSE 3 CODE', 'COURSE 3 NAME',
-        'COURSE 4 CODE', 'COURSE 4 NAME',
-        'COURSE 5 CODE', 'COURSE 5 NAME'
-    ];
-    
-    // Add schedule columns
-    days.forEach(day => {
-        times.forEach(time => {
-            headerRow.push(`${day} ${time}`);
-        });
-    });
-    
-    // Sample row
-    const sampleRow = [
-        'Dr.', 'Ali Saad Alghamdi', 'alghamdiasg@rcjy.edu.sa', 'ACX-F04', '41652',
-        'ELET101', 'Electric Circuit I',
-        'ELET105', 'Electronics  I',
-        'EE 304', 'Control Engineering',
-        '', '',
-        '', ''
-    ];
-    
-    // Add sample schedule data
-    for (let i = 0; i < days.length * times.length; i++) {
-        if (i === 2) {
-            sampleRow.push('471EE|LEC|A/3-120B|2');
-        } else if (i === 18) {
-            sampleRow.push('471EE|LAB|A/3-201|3');
-        } else {
-            sampleRow.push('');
-        }
-    }
-    
-    const emptyRow = Array(headerRow.length).fill('');
-    const scheduleData = [headerRow, sampleRow, emptyRow, emptyRow, emptyRow];
-    
-    const scheduleSheet = XLSX.utils.aoa_to_sheet(scheduleData);
-    
-    const colWidths = [
-        {wch: 8},   // RANK
-        {wch: 25},  // FACULTY NAME
-        {wch: 25},  // EMAIL
-        {wch: 15},  // OFFICE
-        {wch: 15},  // PHONE
-        {wch: 12},  // COURSE 1 CODE
-        {wch: 30},  // COURSE 1 NAME
-        {wch: 12},  // COURSE 2 CODE
-        {wch: 30},  // COURSE 2 NAME
-        {wch: 12},  // COURSE 3 CODE
-        {wch: 30},  // COURSE 3 NAME
-        {wch: 12},  // COURSE 4 CODE
-        {wch: 30},  // COURSE 4 NAME
-        {wch: 12},  // COURSE 5 CODE
-        {wch: 30}   // COURSE 5 NAME
-    ];
-    
-    for (let i = 0; i < days.length * times.length; i++) {
-        colWidths.push({wch: 22});
-    }
-    
-    scheduleSheet['!cols'] = colWidths;
-    XLSX.utils.book_append_sheet(wb, scheduleSheet, 'SCHEDULE DATA');
-    
-    XLSX.writeFile(wb, 'Faculty_Schedule_Template.xlsx');
-}
-
-let uploadedFile = null;
-
-function handleFileSelect(event) {
-    const file = event.target.files[0];
-    if (file) {
-        uploadedFile = file;
-        document.getElementById('fileName').textContent = file.name;
-        document.getElementById('processBtn').disabled = false;
-    }
-}
-
-function processExcelFile() {
-    if (!uploadedFile) {
-        showMessage('Please select a file first', 'error');
-        return;
-    }
-    
-    showMessage('Processing Excel file...', 'success');
-    
-    const reader = new FileReader();
-    
-    reader.onload = function(e) {
-        try {
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, { type: 'array' });
-            
-            console.log('Available sheets:', workbook.SheetNames);
-            
-            // Try to find the schedule data sheet
-            let sheetName = workbook.SheetNames.find(name => 
-                name.toUpperCase().includes('SCHEDULE') || name.toUpperCase().includes('DATA')
-            );
-            
-            // If not found, use the last sheet (usually the data sheet after instructions)
-            if (!sheetName && workbook.SheetNames.length > 1) {
-                sheetName = workbook.SheetNames[1];
-            } else if (!sheetName) {
-                sheetName = workbook.SheetNames[0];
-            }
-            
-            console.log('Using sheet:', sheetName);
-            
-            const worksheet = workbook.Sheets[sheetName];
-            const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
-            
-            console.log('Data rows:', jsonData.length);
-            console.log('Header row:', jsonData[0]);
-            
-            if (jsonData.length < 2) {
-                showMessage('No data found in the Excel file. Please make sure you have filled in at least one faculty member.', 'error');
-                return;
-            }
-            
-            // Check if first row has data (it's the header)
-            if (!jsonData[0] || jsonData[0].length < 5) {
-                showMessage('Invalid Excel format. Please use the provided template.', 'error');
-                return;
-            }
-            
-            generateSchedulesFromExcel(jsonData);
-            
-        } catch (error) {
-            console.error('Error details:', error);
-            showMessage('Error reading Excel file: ' + error.message + '. Please make sure you are using the correct template.', 'error');
-        }
-    };
-    
-    reader.onerror = function(error) {
-        showMessage('Error reading file: ' + error, 'error');
-    };
-    
-    reader.readAsArrayBuffer(uploadedFile);
-}
-
-function generateSchedulesFromExcel(data) {
-    const headerRow = data[0];
-    const schedulesContainer = document.getElementById('schedulesContainer');
-    schedulesContainer.innerHTML = '';
-    
-    console.log('Starting to generate schedules...');
-    console.log('Header row length:', headerRow.length);
-    console.log('Total data rows:', data.length - 1);
-    
-    let successCount = 0;
-    let errorCount = 0;
-    
-    for (let i = 1; i < data.length; i++) {
-        const row = data[i];
-        
-        // Skip empty rows
-        if (!row || row.length === 0 || !row[0] || row[0].toString().trim() === '') {
-            console.log(`Skipping empty row ${i}`);
-            continue;
-        }
-        
-        try {
-            console.log(`Processing row ${i} for: ${row[0]}`);
-            const scheduleHtml = createScheduleFromExcelRow(row, headerRow);
-            schedulesContainer.innerHTML += scheduleHtml;
-            successCount++;
-            console.log(`Successfully generated schedule ${successCount}`);
-        } catch (error) {
-            console.error(`Error processing row ${i}:`, error);
-            errorCount++;
-        }
-    }
-    
-    if (successCount > 0) {
-        showMessage(`Successfully generated ${successCount} schedule(s)${errorCount > 0 ? ` (${errorCount} errors)` : ''}`, 'success');
-        
-        // Scroll to schedules
-        schedulesContainer.scrollIntoView({ behavior: 'smooth' });
-    } else {
-        showMessage('No valid schedule data found. Please check your Excel file format.', 'error');
-    }
-}
-
-function createScheduleFromExcelRow(row, headerRow) {
-    // Extract basic info - NEW ORDER: RANK, FACULTY NAME, EMAIL, OFFICE, PHONE
-    const rank = row[0] || '';
-    const name = row[1] || '';
-    const email = row[2] || '';
-    const office = row[3] || '';
-    const phone = row[4] || '';
-    
-    // Extract courses - NEW STRUCTURE: Up to 5 courses, CODE and NAME only (no section/credits)
-    const courses = [];
-    for (let i = 0; i < 5; i++) {
-        const baseIdx = 5 + (i * 2); // Each course takes 2 columns: CODE, NAME
-        if (row[baseIdx]) {
-            courses.push({
-                code: row[baseIdx] || '',
-                name: row[baseIdx + 1] || ''
-            });
-        }
-    }
-    
-    // Build courses HTML - NEW SIMPLIFIED STRUCTURE matching "Course #X:" format
-    let coursesHTML = '';
-    courses.forEach((course, idx) => {
-        coursesHTML += `
-            <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem; background: #f9f9f9; border-radius: 4px; margin-bottom: 0.4rem;">
-                <label style="font-weight: bold; font-size: 0.8125rem; min-width: 90px;">Course #${idx + 1}:</label>
-                <input type="text" value="${course.code}" readonly style="padding: 0.4rem; font-size: 0.8125rem; border: 1px solid #999; width: 120px; background: white;"/>
-                <input type="text" value="${course.name}" readonly style="padding: 0.4rem; font-size: 0.8125rem; border: 1px solid #999; flex: 1; background: white;"/>
-            </div>
-        `;
-    });
-    
-    // Build schedule table - EXACT original structure with days as ROWS
-    const days = ['SUN', 'MON', 'TUE', 'WED', 'THU'];
-    const timeSlots = [
-        '07:15<br/>08:05', '08:15<br/>09:05', '09:15<br/>10:05', '10:15<br/>11:05',
-        '11:15<br/>12:05', '12:15<br/>13:05', '13:15<br/>14:05', '14:15<br/>15:05',
-        '15:15<br/>16:05', '16:15<br/>17:05', '17:15<br/>18:05', '18:15<br/>19:05',
-        '19:15<br/>20:05', '20:15<br/>21:05', '21:15<br/>22:05', '22:15<br/>23:05'
-    ];
-    
-    const timeLabels = [
-        '07:15-08:05', '08:15-09:05', '09:15-10:05', '10:15-11:05',
-        '11:15-12:05', '12:15-13:05', '13:15-14:05', '14:15-15:05',
-        '15:15-16:05', '16:15-17:05', '17:15-18:05', '18:15-19:05',
-        '19:15-20:05', '20:15-21:05', '21:15-22:05', '22:15-23:05'
-    ];
-    
-    // Track which cells should be skipped (already merged)
-    const skippedCells = new Set();
-    
-    let tableHTML = '';
-    days.forEach((day, dayIdx) => {
-        tableHTML += `<tr><th class="day-cell">${day}</th>`;
-        
-        timeSlots.forEach((timeSlot, timeIdx) => {
-            const cellId = `${day}-${timeIdx}`;
-            
-            // Skip this cell if it's already merged into a previous cell
-            if (skippedCells.has(cellId)) {
-                return; // Don't add this cell, it's part of a merged cell
-            }
-            
-            // Build the exact column name as it appears in the Excel
-            const colName = `${day} ${timeLabels[timeIdx]}`;
-            
-            // Find the column index by matching the exact column name
-            const colIdx = headerRow.findIndex(col => {
-                if (!col) return false;
-                const colStr = col.toString().trim().toUpperCase();
-                const searchStr = colName.toUpperCase();
-                return colStr === searchStr;
-            });
-            
-            let cellContent = '';
-            let cellClass = 'schedule-cell';
-            let colspan = 1;
-            
-            // Debug log for first few cells
-            if (dayIdx === 0 && timeIdx < 3) {
-                console.log(`Looking for column: "${colName}", Found at index: ${colIdx}, Value:`, colIdx !== -1 ? row[colIdx] : 'N/A');
-            }
-            
-            if (colIdx !== -1 && row[colIdx] && row[colIdx].toString().trim() !== '') {
-                const cellData = row[colIdx].toString().trim();
-                const parts = cellData.split('|');
-                
-                if (parts.length >= 3) {
-                    const code = parts[0].trim();
-                    const type = parts[1].trim().toUpperCase();
-                    const location = parts[2].trim();
-                    const sessionLength = parseInt(parts[3]) || 1;
-                    
-                    // Set colspan based on session length
-                    colspan = sessionLength;
-                    
-                    // Mark the next cells as skipped if this is a multi-hour session
-                    if (sessionLength > 1) {
-                        for (let i = 1; i < sessionLength; i++) {
-                            const skipIdx = timeIdx + i;
-                            if (skipIdx < timeSlots.length) {
-                                skippedCells.add(`${day}-${skipIdx}`);
-                            }
-                        }
-                    }
-                    
-                    // Apply type styling
-                    if (type === 'LEC') {
-                        cellClass += ' type-LEC';
-                    } else if (type === 'LAB') {
-                        cellClass += ' type-LAB';
-                    } else if (type === 'TUT') {
-                        cellClass += ' type-TUT';
-                    }
-                    
-                    cellContent = `
-                        <div class="cell-content teaching-mode">
-                            <div class="teaching-fields">
-                                <input type="text" value="${code}" readonly style="border: none; background: transparent; text-align: center; font-weight: bold; font-size: 0.75rem; color: #1565c0; padding: 1px;"/>
-                                <select disabled class="themed-type-select" style="border: none; background: transparent; text-align: center; font-weight: bold; font-size: 0.6875rem; padding: 1px;">
-                                    <option selected>${type}</option>
-                                </select>
-                                <input type="text" value="${location}" readonly style="border: none; background: transparent; text-align: center; font-size: 0.625rem; color: #666; padding: 1px;"/>
-                            </div>
-                        </div>
-                    `;
-                }
-            }
-            
-            // Add colspan attribute if needed
-            const colspanAttr = colspan > 1 ? ` colspan="${colspan}"` : '';
-            tableHTML += `<td class="${cellClass}"${colspanAttr}>${cellContent}</td>`;
-        });
-        
-        tableHTML += '</tr>';
-    });
-    
-    // Calculate totals
-    let teachingHours = 0;
-    let nonTeachingHours = 0;
-    let numCourses = courses.length;
-    
-    // Return the complete schedule HTML using EXACT original structure
-    return `
-        <div class="schedule-item">
-            <div class="container">
-                <div class="header" style="position:relative; margin-bottom:1.875rem; padding:1.25rem 1.875rem; display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div style="text-align: left; flex: 1;">
-                        <h1 class="header-title" style="margin: 0.3125rem 0; font-size: 1.125rem; font-weight: bold;">Royal Commission Yanbu Colleges & Institutes</h1>
-                        <h1 class="header-title" style="margin: 0.3125rem 0; font-size: 1.125rem; font-weight: bold;">Electrical Engineering Department</span>
-                    </div>
-                    <div style="text-align: right; flex: 1; display: flex; flex-direction: column; align-items: flex-end;">
-                        <h1 class="main-title">Faculty Schedule</h1>
-                        <h1 class="header-title" style="margin: 0.3125rem 0; font-size: 1.125rem; font-weight: bold;">First Semester 1447(471)</span>
-                    </div>
-                    <img src="data:image/png;base64,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" alt="Royal Commission Logo" style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 120px; height: auto;" />
-                </div>
-                
-                <div class="faculty-info-wrapper">
-                    <div class="faculty-info">
-                        <div style="display: flex; gap: 2rem; align-items: flex-start;">
-                            <div style="flex: 1; display: flex; flex-direction: column; gap: 0.75rem;">
-                                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                    <label style="font-weight: bold; font-size: 0.875rem; min-width: 120px;">Faculty Name:</label>
-                                    <input type="text" value="${rank}" readonly style="width: 60px; padding: 0.4rem; border: 1px solid #999; font-size: 0.875rem; text-align: center;" class="faculty-input-keep"/>
-                                    <input type="text" value="${name}" readonly style="flex: 1; padding: 0.4rem; border: 1px solid #999; font-size: 0.875rem; text-transform: uppercase;" class="faculty-input-keep"/>
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                    <label style="font-weight: bold; font-size: 0.875rem; min-width: 120px;">Email:</label>
-                                    <input type="text" value="${email}" readonly style="flex: 1; padding: 0.4rem; border: 1px solid #999; font-size: 0.875rem;" class="faculty-input-keep"/>
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                    <label style="font-weight: bold; font-size: 0.875rem; min-width: 120px;">Office Location:</label>
-                                    <input type="text" value="${office}" readonly style="flex: 1; padding: 0.4rem; border: 1px solid #999; font-size: 0.875rem;" class="faculty-input-keep"/>
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                    <label style="font-weight: bold; font-size: 0.875rem; min-width: 120px;">Phone:</label>
-                                    <input type="text" value="${phone}" readonly style="flex: 1; padding: 0.4rem; border: 1px solid #999; font-size: 0.875rem;" class="faculty-input-keep"/>
-                                </div>
-                            </div>
-                            
-                            <div style="flex: 2;">
-                                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                                    ${coursesHTML}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="schedule-table-wrapper">
-                    <table class="schedule-table">
-                        <thead>
-                            <tr>
-                                <th class="time-header first">DAY</th>
-                                <th class="time-header">07:15<br/>08:05</th>
-                                <th class="time-header">08:15<br/>09:05</th>
-                                <th class="time-header">09:15<br/>10:05</th>
-                                <th class="time-header">10:15<br/>11:05</th>
-                                <th class="time-header">11:15<br/>12:05</th>
-                                <th class="time-header">12:15<br/>13:05</th>
-                                <th class="time-header">13:15<br/>14:05</th>
-                                <th class="time-header">14:15<br/>15:05</th>
-                                <th class="time-header">15:15<br/>16:05</th>
-                                <th class="time-header">16:15<br/>17:05</th>
-                                <th class="time-header">17:15<br/>18:05</th>
-                                <th class="time-header">18:15<br/>19:05</th>
-                                <th class="time-header">19:15<br/>20:05</th>
-                                <th class="time-header">20:15<br/>21:05</th>
-                                <th class="time-header">21:15<br/>22:05</th>
-                                <th class="time-header">22:15<br/>23:05</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${tableHTML}
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="summary">
-                    <div class="summary-grid">
-                        <div class="summary-col">
-                            <div class="summary-row-label">Total Teaching Hours:</div>
-                            <div class="summary-row-label">Total Non Teaching Duties Hours:</div>
-                            <div class="summary-row-label">No. of Courses:</div>
-                        </div>
-                        <div class="summary-col">
-                            <div class="summary-row-value"><span>${teachingHours}</span> Hours</div>
-                            <div class="summary-row-value"><span>${nonTeachingHours}</span> Hours</div>
-                            <div class="summary-row-value"><span>${numCourses}</span> Courses</div>
-                        </div>
-                        <div class="summary-col">
-                            <div class="summary-row-label">Total NS Hours:</div>
-                            <div class="summary-row-label">Total CH Hours:</div>
-                            <div class="summary-row-label">Total Office Hours:</div>
-                            <div class="summary-row-label">Internal Activity:</div>
-                        </div>
-                        <div class="summary-col">
-                            <div class="summary-row-value"><span>0</span> Hours</div>
-                            <div class="summary-row-value"><span>0</span> Hours</div>
-                            <div class="summary-row-value"><span>0</span> Hours</div>
-                            <div class="summary-row-value"><span>40</span> Hours</div>
-                        </div>
-                    </div>
-                    <div class="summary-row-total" style="border-top: 2px solid #333; padding-top: 0.5rem; margin-top: 0.5rem; display: flex; justify-content: space-between; font-weight: bold;">
-                        <span>TOTAL WEEKLY HOURS:</span>
-                        <span class="summary-value" style="font-size: 1rem;"><span>40</span> Hours</span>
-                    </div>
-                    <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #e0e0e0;">
-                        <div style="display: flex; flex-wrap: wrap; gap: 15px; font-size: 13px; line-height: 1.6;">
-                            <span><strong style="color: var(--theme-primary); font-weight: bold;">BREAK</strong> <span style="color: #000;">- BREAK TIME</span></span>
-                            <span style="color: #ccc;">|</span>
-                            <span><strong style="color: var(--theme-primary); font-weight: bold;">NS</strong> <span style="color: #000;">- NON SCHEDULED HOURS</span></span>
-                            <span style="color: #ccc;">|</span>
-                            <span><strong style="color: var(--theme-primary); font-weight: bold;">OH</strong> <span style="color: #000;">- OFFICE HOURS</span></span>
-                            <span style="color: #ccc;">|</span>
-                            <span><strong style="color: var(--theme-primary); font-weight: bold;">CH</strong> <span style="color: #000;">- COMPENSATED HOURS</span></span>
-                            <span style="color: #ccc;">|</span>
-                            <span><strong style="color: var(--theme-primary); font-weight: bold;">*</strong> <span style="color: #000;">- Transfer Knowledge and Expertise</span></span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="footer">
-                    <div style="display: flex; gap: 3rem; align-items: flex-start; width: 100%; margin-bottom: 1rem;">
-                        <div style="flex: 1;">
-                            <div style="font-weight: bold; font-size: 0.9rem; margin-bottom: 0.5rem;">Faculty Acknowledgment:</div>
-                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                    <label style="min-width: 80px; font-size: 0.875rem;">Name:</label>
-                                    <input type="text" value="${name}" readonly style="flex: 1; padding: 0.3rem; border: 1px solid #999; font-size: 0.875rem; background: #f5f5f5;" class="faculty-input-keep"/>
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                    <label style="min-width: 80px; font-size: 0.875rem;">Signature:</label>
-                                    <div style="flex: 1; border-bottom: 1px solid #333; height: 40px;"></div>
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                    <label style="min-width: 80px; font-size: 0.875rem;">Date:</label>
-                                    <input type="text" placeholder="DD/MM/YYYY" style="flex: 1; padding: 0.3rem; border: 1px solid #999; font-size: 0.875rem;" class="faculty-input-keep"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: bold; font-size: 0.9rem; margin-bottom: 0.5rem;">Head of Department Approval:</div>
-                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                    <label style="min-width: 80px; font-size: 0.875rem;">Name:</label>
-                                    <input type="text" placeholder="Head of Department name" style="flex: 1; padding: 0.3rem; border: 1px solid #999; font-size: 0.875rem;" class="faculty-input-keep"/>
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                    <label style="min-width: 80px; font-size: 0.875rem;">Signature:</label>
-                                    <div style="flex: 1; border-bottom: 1px solid #333; height: 40px;"></div>
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                    <label style="min-width: 80px; font-size: 0.875rem;">Date:</label>
-                                    <input type="text" placeholder="DD/MM/YYYY" style="flex: 1; padding: 0.3rem; border: 1px solid #999; font-size: 0.875rem;" class="faculty-input-keep"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-function showMessage(message, type) {
-    const container = document.getElementById('messageContainer');
-    const className = type === 'error' ? 'error-message' : 'success-message';
-    container.innerHTML = `<div class="${className}">${message}</div>`;
-    
-    setTimeout(() => {
-        container.innerHTML = '';
-    }, 5000);
-}
-
-function printAllSchedules() {
-    window.print();
-}
-
+// ========== PDF EXPORT FUNCTION ==========
 async function exportToPDF() {
     const { jsPDF } = window.jspdf;
     
@@ -8725,7 +8108,7 @@ async function exportToPDF() {
     }
     
     if (scheduleContainers.length === 0) {
-        alert('No schedules to export!\n\nPlease create a schedule first:\n1. Upload Excel file (or use manual entry)\n2. Fill in faculty information\n3. Add courses to schedule\n4. Then try exporting again');
+        alert('No schedules to export!\n\nPlease create a schedule first:\n1. Fill in faculty information\n2. Add courses to schedule\n3. Then try exporting again');
         return;
     }
     
@@ -8736,7 +8119,7 @@ async function exportToPDF() {
     document.body.appendChild(loadingMsg);
     
     // Hide buttons and UI elements temporarily
-    const elementsToHide = document.querySelectorAll('.scroll-top-button, #actionButtons, .course-row button, .btn-cancel, .simple-cancel, .back-button');
+    const elementsToHide = document.querySelectorAll('#actionButtons, .course-row button, .btn-cancel, .simple-cancel');
     elementsToHide.forEach(el => {
         if (el) el.style.display = 'none';
     });
@@ -8776,9 +8159,9 @@ async function exportToPDF() {
                 section.style.boxSizing = 'border-box';
             });
             
-            // Capture each schedule as canvas - ACTUAL 700KB OUTPUT
+            // Capture each schedule as canvas
             const canvas = await html2canvas(container, {
-                scale: 2.5,  // High scale for excellent sharpness
+                scale: 2.5,
                 useCORS: true,
                 logging: false,
                 backgroundColor: '#ffffff'
@@ -8789,12 +8172,12 @@ async function exportToPDF() {
             container.style.boxSizing = originalBoxSizing;
             container.style.overflow = originalOverflow;
             
-            // Use JPEG with 90% quality - should produce actual ~700KB PDFs
+            // Use JPEG with 90% quality
             const imgData = canvas.toDataURL('image/jpeg', 0.9);
             
             // Calculate dimensions to fit A4 landscape
-            const pdfWidth = 287; // A4 landscape width in mm (297 - 10mm margins)
-            const pdfHeight = 200; // A4 landscape height in mm (210 - 10mm margins)
+            const pdfWidth = 287;
+            const pdfHeight = 200;
             const imgWidth = canvas.width;
             const imgHeight = canvas.height;
             const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
@@ -8836,7 +8219,6 @@ async function exportToPDF() {
         loadingMsg.style.background = 'rgba(204, 0, 0, 0.95)';
     }
     
-    // Restore hidden elements (EXCEPT actionButtons)
     // Remove pdf-export-mode class
     document.body.classList.remove('pdf-export-mode');
     
@@ -8849,27 +8231,8 @@ async function exportToPDF() {
         loadingMsg.remove();
     }, 3000);
 }
-
-// Scroll to top functionality
-function scrollToTop() {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-}
-
-// Show/hide scroll to top button based on scroll position
-window.addEventListener('scroll', function() {
-    const scrollButton = document.getElementById('scrollTopBtn');
-    if (scrollButton) {
-        if (window.pageYOffset > 300) {
-            scrollButton.classList.add('visible');
-        } else {
-            scrollButton.classList.remove('visible');
-        }
-    }
-});
 </script>
+
 
 
 <!-- Schedule Popup Modal -->
@@ -9305,16 +8668,16 @@ function applySchedulesInBackground(schedulesToApply) {
                                     z-index: 10;
                                     transition: all 0.2s;
                                 " onmouseover="this.style.background='#c0392b'" onmouseout="this.style.background='#e74c3c'">✕</button>
-                                <div style="font-weight: bold; font-size: 1.1rem; color: #2c3e50; margin-bottom: 0.5rem;">
+                                <div style="font-weight: bold; font-size: 1.1rem; color: #2c3e50; margin-bottom: 0.5rem; text-transform: uppercase;">
                                     ${currentCourseCode}${schedule.type === 'TRANSFER_KNOWLEDGE' ? ' ⭐' : ''}
                                 </div>
-                                <div style="font-size: 0.9rem; color: #7f8c8d; margin-bottom: 0.3rem;">
+                                <div style="font-size: 0.9rem; color: #7f8c8d; margin-bottom: 0.3rem; text-transform: uppercase;">
                                     ${schedule.type}${schedule.section ? ' - Section ' + schedule.section : ''}
                                 </div>
-                                <div style="font-size: 0.85rem; color: #95a5a6; margin-bottom: 0.3rem;">
+                                <div style="font-size: 0.85rem; color: #95a5a6; margin-bottom: 0.3rem; text-transform: uppercase;">
                                     📍 ${schedule.location}
                                 </div>
-                                <div style="font-size: 0.8rem; color: #bdc3c7; margin-top: 0.3rem; padding: 0.3rem 0.5rem; background: rgba(52, 152, 219, 0.1); border-radius: 4px; display: inline-block; align-self: flex-start;">
+                                <div style="font-size: 0.8rem; color: #bdc3c7; margin-top: 0.3rem; padding: 0.3rem 0.5rem; background: rgba(52, 152, 219, 0.1); border-radius: 4px; display: inline-block; align-self: flex-start; text-transform: uppercase;">
                                     ⏱️ ${schedule.sessionLength} hour${schedule.sessionLength > 1 ? 's' : ''} session
                                 </div>
                             </div>
