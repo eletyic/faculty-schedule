@@ -4207,6 +4207,597 @@ body {
         }
         /* ========== END MOBILE STYLES ========== */
         
+        /* ========== MOBILE WIZARD INTERFACE ========== */
+        .mobile-wizard-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #f5f7fa;
+            z-index: 10000;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .mobile-wizard-container.active {
+                display: flex;
+            }
+            
+            body.mobile-wizard-active .page-container,
+            body.mobile-wizard-active .floating-menu-container,
+            body.mobile-wizard-active .theme-selector-panel {
+                display: none !important;
+            }
+        }
+        
+        /* Wizard Header */
+        .wizard-header {
+            background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-secondary) 100%);
+            color: white;
+            padding: 12px 16px;
+            padding-top: max(12px, env(safe-area-inset-top));
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+        
+        .wizard-header-title {
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .wizard-header-close {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .wizard-header-close:active {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        /* Progress Bar */
+        .wizard-progress {
+            background: white;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            flex-shrink: 0;
+        }
+        
+        .wizard-progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+        
+        .wizard-progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 16px;
+            left: 24px;
+            right: 24px;
+            height: 3px;
+            background: #e0e0e0;
+            z-index: 0;
+        }
+        
+        .wizard-progress-bar {
+            position: absolute;
+            top: 16px;
+            left: 24px;
+            height: 3px;
+            background: var(--theme-accent);
+            z-index: 1;
+            transition: width 0.3s ease;
+        }
+        
+        .wizard-step-indicator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 2;
+            cursor: pointer;
+        }
+        
+        .wizard-step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            color: #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 3px solid white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        
+        .wizard-step-indicator.active .wizard-step-circle {
+            background: var(--theme-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .wizard-step-indicator.completed .wizard-step-circle {
+            background: var(--theme-accent);
+            color: white;
+        }
+        
+        .wizard-step-label {
+            font-size: 10px;
+            margin-top: 6px;
+            color: #999;
+            font-weight: 500;
+            text-align: center;
+        }
+        
+        .wizard-step-indicator.active .wizard-step-label {
+            color: var(--theme-primary);
+            font-weight: 600;
+        }
+        
+        .wizard-step-indicator.completed .wizard-step-label {
+            color: var(--theme-accent);
+        }
+        
+        /* Wizard Content Area */
+        .wizard-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .wizard-step-content {
+            display: none;
+            padding: 16px;
+            padding-bottom: 100px;
+            animation: wizardFadeIn 0.3s ease;
+        }
+        
+        .wizard-step-content.active {
+            display: block;
+        }
+        
+        @keyframes wizardFadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Wizard Cards */
+        .wizard-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        
+        .wizard-card-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--theme-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .wizard-field {
+            margin-bottom: 16px;
+        }
+        
+        .wizard-field:last-child {
+            margin-bottom: 0;
+        }
+        
+        .wizard-field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 6px;
+        }
+        
+        .wizard-field input,
+        .wizard-field select {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 16px;
+            border: 2px solid #e8e8e8;
+            border-radius: 12px;
+            background: #fafafa;
+            transition: all 0.2s ease;
+            -webkit-appearance: none;
+        }
+        
+        .wizard-field input:focus,
+        .wizard-field select:focus {
+            outline: none;
+            border-color: var(--theme-primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(5, 41, 118, 0.1);
+        }
+        
+        .wizard-field select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23555' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+        
+        .wizard-field-row {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .wizard-field-row .wizard-field {
+            flex: 1;
+        }
+        
+        /* Course Cards in Wizard */
+        .wizard-course-card {
+            background: #f8fafc;
+            border: 2px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        
+        .wizard-course-card.has-schedule {
+            border-color: var(--theme-accent);
+            background: linear-gradient(135deg, rgba(32, 206, 118, 0.05) 0%, rgba(32, 206, 118, 0.02) 100%);
+        }
+        
+        .wizard-course-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .wizard-course-number {
+            background: var(--theme-primary);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .wizard-course-delete {
+            background: #ff5252;
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        
+        .wizard-course-schedule-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .wizard-course-schedule-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .wizard-add-course-btn {
+            width: 100%;
+            padding: 16px;
+            background: white;
+            border: 2px dashed var(--theme-primary);
+            border-radius: 12px;
+            color: var(--theme-primary);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .wizard-add-course-btn:active {
+            background: var(--theme-light);
+        }
+        
+        /* Schedule Table in Wizard */
+        .wizard-schedule-wrapper {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        
+        .wizard-schedule-hint {
+            background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-secondary) 100%);
+            color: white;
+            padding: 12px 16px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .wizard-schedule-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .wizard-schedule-table {
+            min-width: 700px;
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+        
+        .wizard-schedule-table th {
+            background: var(--theme-primary);
+            color: white;
+            padding: 10px 6px;
+            font-weight: 600;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .wizard-schedule-table th:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 11;
+            background: var(--theme-dark);
+        }
+        
+        .wizard-schedule-table td {
+            border: 1px solid #e0e0e0;
+            padding: 8px 4px;
+            text-align: center;
+            vertical-align: middle;
+            min-height: 50px;
+            cursor: pointer;
+        }
+        
+        .wizard-schedule-table td:first-child {
+            position: sticky;
+            left: 0;
+            background: var(--theme-light);
+            font-weight: 600;
+            color: var(--theme-primary);
+            z-index: 5;
+        }
+        
+        .wizard-schedule-table td:hover {
+            background: rgba(5, 41, 118, 0.08);
+        }
+        
+        .wizard-schedule-table td.has-class {
+            background: var(--theme-teaching-bg);
+        }
+        
+        .wizard-schedule-table td.has-oh {
+            background: var(--theme-oh-bg);
+        }
+        
+        /* Signature Section in Wizard */
+        .wizard-signature-box {
+            border: 2px dashed #ccc;
+            border-radius: 12px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #fafafa;
+        }
+        
+        .wizard-signature-box:active {
+            background: #f0f0f0;
+            border-color: var(--theme-primary);
+        }
+        
+        .wizard-signature-box.has-signature {
+            border-style: solid;
+            border-color: var(--theme-accent);
+            background: white;
+        }
+        
+        .wizard-signature-box img {
+            max-height: 80px;
+            max-width: 100%;
+        }
+        
+        /* Summary Cards */
+        .wizard-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+        .wizard-summary-item {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 14px;
+            text-align: center;
+        }
+        
+        .wizard-summary-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--theme-primary);
+        }
+        
+        .wizard-summary-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+        
+        /* Wizard Footer / Navigation */
+        .wizard-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 12px 16px;
+            padding-bottom: max(12px, env(safe-area-inset-bottom));
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 12px;
+            z-index: 10001;
+        }
+        
+        .wizard-btn {
+            flex: 1;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .wizard-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .wizard-btn-back {
+            background: #f0f0f0;
+            border: none;
+            color: #555;
+            flex: 0.4;
+        }
+        
+        .wizard-btn-next {
+            background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-secondary) 100%);
+            border: none;
+            color: white;
+            box-shadow: 0 4px 15px rgba(5, 41, 118, 0.3);
+        }
+        
+        .wizard-btn-next.finish {
+            background: linear-gradient(135deg, var(--theme-accent) 0%, #1ab866 100%);
+            box-shadow: 0 4px 15px rgba(32, 206, 118, 0.3);
+        }
+        
+        .wizard-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Mobile Menu Button to Enter Wizard */
+        .mobile-wizard-trigger {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--theme-accent) 0%, #1ab866 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 20px rgba(32, 206, 118, 0.4);
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .mobile-wizard-trigger {
+                display: flex;
+            }
+        }
+        
+        .mobile-wizard-trigger:active {
+            transform: scale(0.95);
+        }
+        
+        /* Landscape mode adjustments */
+        @media screen and (max-width: 768px) and (orientation: landscape) {
+            .wizard-header {
+                padding: 8px 16px;
+            }
+            
+            .wizard-progress {
+                padding: 10px 16px;
+            }
+            
+            .wizard-step-circle {
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+            }
+            
+            .wizard-footer {
+                padding: 8px 16px;
+            }
+            
+            .wizard-btn {
+                padding: 12px;
+            }
+        }
+        /* ========== END MOBILE WIZARD ========== */
+        
         @media print {
             .header {
                 display: flex !important;
@@ -4244,6 +4835,273 @@ body {
 </style>
 </head>
 <body>
+
+<!-- ========== MOBILE WIZARD TRIGGER BUTTON ========== -->
+<button class="mobile-wizard-trigger" onclick="openMobileWizard()" title="Open Mobile Wizard">
+    📱
+</button>
+
+<!-- ========== MOBILE WIZARD INTERFACE ========== -->
+<div class="mobile-wizard-container" id="mobileWizard">
+    <!-- Wizard Header -->
+    <div class="wizard-header">
+        <div class="wizard-header-title">
+            <span>📅</span> Faculty Schedule
+        </div>
+        <button class="wizard-header-close" onclick="closeMobileWizard()">✕</button>
+    </div>
+    
+    <!-- Progress Bar -->
+    <div class="wizard-progress">
+        <div class="wizard-progress-steps">
+            <div class="wizard-progress-bar" id="wizardProgressBar" style="width: 0%;"></div>
+            
+            <div class="wizard-step-indicator active" onclick="goToWizardStep(1)" data-step="1">
+                <div class="wizard-step-circle">1</div>
+                <div class="wizard-step-label">Info</div>
+            </div>
+            
+            <div class="wizard-step-indicator" onclick="goToWizardStep(2)" data-step="2">
+                <div class="wizard-step-circle">2</div>
+                <div class="wizard-step-label">Courses</div>
+            </div>
+            
+            <div class="wizard-step-indicator" onclick="goToWizardStep(3)" data-step="3">
+                <div class="wizard-step-circle">3</div>
+                <div class="wizard-step-label">Schedule</div>
+            </div>
+            
+            <div class="wizard-step-indicator" onclick="goToWizardStep(4)" data-step="4">
+                <div class="wizard-step-circle">4</div>
+                <div class="wizard-step-label">Review</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Wizard Content -->
+    <div class="wizard-content">
+        
+        <!-- STEP 1: Information -->
+        <div class="wizard-step-content active" id="wizardStep1">
+            <!-- Department & Semester Card -->
+            <div class="wizard-card">
+                <div class="wizard-card-title">🏛️ Department & Semester</div>
+                
+                <div class="wizard-field">
+                    <label>Department</label>
+                    <select id="wizardDepartment" onchange="syncWizardToMain()">
+                        <option value="Chemical Engineering">Chemical Engineering</option>
+                        <option value="Computer Science and Engineering">Computer Science and Engineering</option>
+                        <option value="Electrical Engineering" selected>Electrical Engineering</option>
+                        <option value="Management Science">Management Science</option>
+                        <option value="Mechanical Engineering">Mechanical Engineering</option>
+                    </select>
+                </div>
+                
+                <div class="wizard-field">
+                    <label>Semester</label>
+                    <select id="wizardSemester" onchange="syncWizardToMain()">
+                        <option value="First">First Semester</option>
+                        <option value="Second">Second Semester</option>
+                        <option value="Summer">Summer Semester</option>
+                    </select>
+                </div>
+                
+                <div class="wizard-field-row">
+                    <div class="wizard-field">
+                        <label>Hijri Year</label>
+                        <input type="text" id="wizardHijriYear" placeholder="e.g., 1446" oninput="syncWizardToMain()">
+                    </div>
+                    <div class="wizard-field">
+                        <label>Term Code</label>
+                        <input type="text" id="wizardTermCode" placeholder="e.g., 471" oninput="syncWizardToMain()">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Faculty Info Card -->
+            <div class="wizard-card">
+                <div class="wizard-card-title">👤 Faculty Information</div>
+                
+                <div class="wizard-field-row">
+                    <div class="wizard-field" style="flex: 0.4;">
+                        <label>Rank</label>
+                        <input type="text" id="wizardRank" placeholder="Dr." oninput="syncWizardToMain()">
+                    </div>
+                    <div class="wizard-field" style="flex: 1;">
+                        <label>Full Name</label>
+                        <input type="text" id="wizardName" placeholder="Enter your name" oninput="this.value = this.value.toUpperCase(); syncWizardToMain()">
+                    </div>
+                </div>
+                
+                <div class="wizard-field">
+                    <label>Email</label>
+                    <input type="email" id="wizardEmail" placeholder="email@example.com" oninput="syncWizardToMain()">
+                </div>
+                
+                <div class="wizard-field-row">
+                    <div class="wizard-field">
+                        <label>Office Location</label>
+                        <input type="text" id="wizardOffice" placeholder="Building/Room" oninput="syncWizardToMain()">
+                    </div>
+                    <div class="wizard-field">
+                        <label>Phone</label>
+                        <input type="tel" id="wizardPhone" placeholder="Phone number" oninput="syncWizardToMain()">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- STEP 2: Courses -->
+        <div class="wizard-step-content" id="wizardStep2">
+            <div class="wizard-card">
+                <div class="wizard-card-title">📚 Your Courses</div>
+                <p style="font-size: 13px; color: #666; margin-bottom: 16px;">
+                    Add the courses you're teaching this semester. You'll schedule them in the next step.
+                </p>
+                
+                <div id="wizardCoursesContainer">
+                    <!-- Course cards will be added here -->
+                </div>
+                
+                <button class="wizard-add-course-btn" onclick="addWizardCourse()">
+                    <span>➕</span> Add Course
+                </button>
+            </div>
+        </div>
+        
+        <!-- STEP 3: Schedule -->
+        <div class="wizard-step-content" id="wizardStep3">
+            <div class="wizard-schedule-wrapper">
+                <div class="wizard-schedule-hint">
+                    <span>👆</span> Tap any cell to add a class or activity
+                </div>
+                <div class="wizard-schedule-scroll">
+                    <table class="wizard-schedule-table" id="wizardScheduleTable">
+                        <thead>
+                            <tr>
+                                <th>Day</th>
+                                <th>07:15<br>08:05</th>
+                                <th>08:15<br>09:05</th>
+                                <th>09:15<br>10:05</th>
+                                <th>10:15<br>11:05</th>
+                                <th>11:15<br>12:05</th>
+                                <th>12:15<br>13:05</th>
+                                <th>13:15<br>14:05</th>
+                                <th>14:15<br>15:05</th>
+                                <th>15:15<br>16:05</th>
+                                <th>16:15<br>17:05</th>
+                            </tr>
+                        </thead>
+                        <tbody id="wizardScheduleBody">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="wizard-card" style="margin-top: 16px;">
+                <div class="wizard-card-title">💡 Quick Tips</div>
+                <ul style="font-size: 13px; color: #666; padding-left: 20px; margin: 0;">
+                    <li style="margin-bottom: 8px;">Scroll horizontally to see all time slots</li>
+                    <li style="margin-bottom: 8px;">Tap a cell to add Teaching, Office Hours, Break, etc.</li>
+                    <li>The schedule syncs with the main view automatically</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- STEP 4: Review & Sign -->
+        <div class="wizard-step-content" id="wizardStep4">
+            <!-- Summary Card -->
+            <div class="wizard-card">
+                <div class="wizard-card-title">📊 Schedule Summary</div>
+                
+                <div class="wizard-summary-grid">
+                    <div class="wizard-summary-item">
+                        <div class="wizard-summary-value" id="wizardSummaryTeaching">0</div>
+                        <div class="wizard-summary-label">Teaching Hours</div>
+                    </div>
+                    <div class="wizard-summary-item">
+                        <div class="wizard-summary-value" id="wizardSummaryOffice">0</div>
+                        <div class="wizard-summary-label">Office Hours</div>
+                    </div>
+                    <div class="wizard-summary-item">
+                        <div class="wizard-summary-value" id="wizardSummaryCourses">0</div>
+                        <div class="wizard-summary-label">Courses</div>
+                    </div>
+                    <div class="wizard-summary-item">
+                        <div class="wizard-summary-value" id="wizardSummaryTotal">0</div>
+                        <div class="wizard-summary-label">Total Hours</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Faculty Signature Card -->
+            <div class="wizard-card">
+                <div class="wizard-card-title">✍️ Faculty Acknowledgment</div>
+                
+                <div class="wizard-field">
+                    <label>Name</label>
+                    <input type="text" id="wizardAckName" readonly style="background: #f0f0f0;">
+                </div>
+                
+                <div class="wizard-field">
+                    <label>Signature</label>
+                    <div class="wizard-signature-box" id="wizardFacultySignature" onclick="openSignatureModal('faculty')">
+                        <span>Tap to sign</span>
+                    </div>
+                </div>
+                
+                <div class="wizard-field">
+                    <label>Date</label>
+                    <input type="text" id="wizardAckDate" placeholder="DD/MM/YYYY" oninput="syncWizardToMain()">
+                </div>
+            </div>
+            
+            <!-- HOD Signature Card -->
+            <div class="wizard-card">
+                <div class="wizard-card-title">✍️ Head of Department Approval</div>
+                
+                <div class="wizard-field">
+                    <label>Name</label>
+                    <input type="text" id="wizardHodName" placeholder="HOD Name" oninput="syncWizardToMain()">
+                </div>
+                
+                <div class="wizard-field">
+                    <label>Signature</label>
+                    <div class="wizard-signature-box" id="wizardHodSignature" onclick="openSignatureModal('hod')">
+                        <span>Tap to sign</span>
+                    </div>
+                </div>
+                
+                <div class="wizard-field">
+                    <label>Date</label>
+                    <input type="text" id="wizardHodDate" placeholder="DD/MM/YYYY" oninput="syncWizardToMain()">
+                </div>
+            </div>
+            
+            <!-- Export Card -->
+            <div class="wizard-card" style="background: linear-gradient(135deg, var(--theme-accent) 0%, #1ab866 100%); color: white;">
+                <div style="text-align: center;">
+                    <div style="font-size: 40px; margin-bottom: 12px;">📄</div>
+                    <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">Ready to Export?</div>
+                    <div style="font-size: 13px; opacity: 0.9;">Your schedule is complete and ready for PDF export</div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- Wizard Footer Navigation -->
+    <div class="wizard-footer">
+        <button class="wizard-btn wizard-btn-back" id="wizardBtnBack" onclick="wizardPrevStep()" style="display: none;">
+            ← Back
+        </button>
+        <button class="wizard-btn wizard-btn-next" id="wizardBtnNext" onclick="wizardNextStep()">
+            Next →
+        </button>
+    </div>
+</div>
 
 <!-- ========== LANDING PAGE ========== -->
 <div class="page-container landing-page active" id="landingPage">
@@ -10694,6 +11552,583 @@ document.addEventListener('DOMContentLoaded', function() {
     }, { passive: true });
 })();
 // ========== END MOBILE ENHANCEMENTS ==========
+
+// ========== MOBILE WIZARD FUNCTIONALITY ==========
+let currentWizardStep = 1;
+const totalWizardSteps = 4;
+let wizardCourses = [];
+
+// Open Mobile Wizard
+function openMobileWizard() {
+    document.getElementById('mobileWizard').classList.add('active');
+    document.body.classList.add('mobile-wizard-active');
+    document.body.style.overflow = 'hidden';
+    
+    // Sync data from main form to wizard
+    syncMainToWizard();
+    
+    // Initialize wizard schedule table
+    initWizardScheduleTable();
+    
+    // Update wizard summary
+    updateWizardSummary();
+    
+    // Go to step 1
+    goToWizardStep(1);
+}
+
+// Close Mobile Wizard
+function closeMobileWizard() {
+    document.getElementById('mobileWizard').classList.remove('active');
+    document.body.classList.remove('mobile-wizard-active');
+    document.body.style.overflow = '';
+    
+    // Sync data back to main form
+    syncWizardToMain();
+}
+
+// Navigate to specific step
+function goToWizardStep(step) {
+    if (step < 1 || step > totalWizardSteps) return;
+    
+    currentWizardStep = step;
+    
+    // Update step content visibility
+    document.querySelectorAll('.wizard-step-content').forEach((content, index) => {
+        content.classList.toggle('active', index === step - 1);
+    });
+    
+    // Update step indicators
+    document.querySelectorAll('.wizard-step-indicator').forEach((indicator, index) => {
+        indicator.classList.remove('active', 'completed');
+        if (index === step - 1) {
+            indicator.classList.add('active');
+        } else if (index < step - 1) {
+            indicator.classList.add('completed');
+        }
+    });
+    
+    // Update progress bar
+    const progress = ((step - 1) / (totalWizardSteps - 1)) * 100;
+    document.getElementById('wizardProgressBar').style.width = progress + '%';
+    
+    // Update navigation buttons
+    const backBtn = document.getElementById('wizardBtnBack');
+    const nextBtn = document.getElementById('wizardBtnNext');
+    
+    backBtn.style.display = step === 1 ? 'none' : 'flex';
+    
+    if (step === totalWizardSteps) {
+        nextBtn.innerHTML = '📄 Export PDF';
+        nextBtn.classList.add('finish');
+    } else {
+        nextBtn.innerHTML = 'Next →';
+        nextBtn.classList.remove('finish');
+    }
+    
+    // Update summary on step 4
+    if (step === 4) {
+        updateWizardSummary();
+        updateWizardAckName();
+    }
+    
+    // Sync courses on step 2
+    if (step === 2) {
+        syncCoursesToWizard();
+    }
+    
+    // Refresh schedule on step 3
+    if (step === 3) {
+        refreshWizardSchedule();
+    }
+    
+    // Scroll to top of wizard content
+    document.querySelector('.wizard-content').scrollTop = 0;
+}
+
+// Next step
+function wizardNextStep() {
+    if (currentWizardStep === totalWizardSteps) {
+        // Export PDF
+        closeMobileWizard();
+        setTimeout(() => {
+            if (typeof lockAndExport === 'function') {
+                lockAndExport();
+            }
+        }, 300);
+        return;
+    }
+    goToWizardStep(currentWizardStep + 1);
+}
+
+// Previous step
+function wizardPrevStep() {
+    goToWizardStep(currentWizardStep - 1);
+}
+
+// Sync data from main form to wizard
+function syncMainToWizard() {
+    // Department & Semester
+    const deptSelect = document.getElementById('departmentSelect');
+    const wizardDept = document.getElementById('wizardDepartment');
+    if (deptSelect && wizardDept) wizardDept.value = deptSelect.value;
+    
+    const semSelect = document.getElementById('semesterType');
+    const wizardSem = document.getElementById('wizardSemester');
+    if (semSelect && wizardSem) wizardSem.value = semSelect.value;
+    
+    const hijriYear = document.getElementById('hijriYear');
+    const wizardHijri = document.getElementById('wizardHijriYear');
+    if (hijriYear && wizardHijri) wizardHijri.value = hijriYear.value;
+    
+    const termCode = document.getElementById('gregorianCode');
+    const wizardTerm = document.getElementById('wizardTermCode');
+    if (termCode && wizardTerm) wizardTerm.value = termCode.value;
+    
+    // Faculty Info
+    const rank = document.getElementById('facultyRank');
+    const wizardRank = document.getElementById('wizardRank');
+    if (rank && wizardRank) wizardRank.value = rank.value;
+    
+    const name = document.getElementById('facultyName');
+    const wizardName = document.getElementById('wizardName');
+    if (name && wizardName) wizardName.value = name.value;
+    
+    const email = document.getElementById('email');
+    const wizardEmail = document.getElementById('wizardEmail');
+    if (email && wizardEmail) wizardEmail.value = email.value;
+    
+    const office = document.getElementById('officeLocation');
+    const wizardOffice = document.getElementById('wizardOffice');
+    if (office && wizardOffice) wizardOffice.value = office.value;
+    
+    const phone = document.getElementById('phone');
+    const wizardPhone = document.getElementById('wizardPhone');
+    if (phone && wizardPhone) wizardPhone.value = phone.value;
+    
+    // Signatures dates
+    const ackDate = document.getElementById('instructorAckDate');
+    const wizardAckDate = document.getElementById('wizardAckDate');
+    if (ackDate && wizardAckDate) wizardAckDate.value = ackDate.value;
+    
+    const hodName = document.getElementById('hodName');
+    const wizardHodName = document.getElementById('wizardHodName');
+    if (hodName && wizardHodName) wizardHodName.value = hodName.value;
+    
+    const hodDate = document.getElementById('hodDate');
+    const wizardHodDate = document.getElementById('wizardHodDate');
+    if (hodDate && wizardHodDate) wizardHodDate.value = hodDate.value;
+    
+    // Sync courses
+    syncCoursesToWizard();
+}
+
+// Sync data from wizard to main form
+function syncWizardToMain() {
+    // Department & Semester
+    const wizardDept = document.getElementById('wizardDepartment');
+    const deptSelect = document.getElementById('departmentSelect');
+    if (wizardDept && deptSelect) {
+        deptSelect.value = wizardDept.value;
+        if (typeof updateDepartmentDisplay === 'function') updateDepartmentDisplay();
+    }
+    
+    const wizardSem = document.getElementById('wizardSemester');
+    const semSelect = document.getElementById('semesterType');
+    if (wizardSem && semSelect) {
+        semSelect.value = wizardSem.value;
+        if (typeof updateSemesterDisplay === 'function') updateSemesterDisplay();
+    }
+    
+    const wizardHijri = document.getElementById('wizardHijriYear');
+    const hijriYear = document.getElementById('hijriYear');
+    if (wizardHijri && hijriYear) {
+        hijriYear.value = wizardHijri.value;
+        if (typeof updateSemesterDisplay === 'function') updateSemesterDisplay();
+    }
+    
+    const wizardTerm = document.getElementById('wizardTermCode');
+    const termCode = document.getElementById('gregorianCode');
+    if (wizardTerm && termCode) {
+        termCode.value = wizardTerm.value;
+        if (typeof updateSemesterDisplay === 'function') updateSemesterDisplay();
+    }
+    
+    // Faculty Info
+    const wizardRank = document.getElementById('wizardRank');
+    const rank = document.getElementById('facultyRank');
+    if (wizardRank && rank) rank.value = wizardRank.value;
+    
+    const wizardName = document.getElementById('wizardName');
+    const name = document.getElementById('facultyName');
+    if (wizardName && name) {
+        name.value = wizardName.value;
+        // Trigger the sync to acknowledgment name
+        const event = new Event('input', { bubbles: true });
+        name.dispatchEvent(event);
+    }
+    
+    const wizardEmail = document.getElementById('wizardEmail');
+    const email = document.getElementById('email');
+    if (wizardEmail && email) email.value = wizardEmail.value;
+    
+    const wizardOffice = document.getElementById('wizardOffice');
+    const office = document.getElementById('officeLocation');
+    if (wizardOffice && office) office.value = wizardOffice.value;
+    
+    const wizardPhone = document.getElementById('wizardPhone');
+    const phone = document.getElementById('phone');
+    if (wizardPhone && phone) phone.value = wizardPhone.value;
+    
+    // Signature dates
+    const wizardAckDate = document.getElementById('wizardAckDate');
+    const ackDate = document.getElementById('instructorAckDate');
+    if (wizardAckDate && ackDate) ackDate.value = wizardAckDate.value;
+    
+    const wizardHodName = document.getElementById('wizardHodName');
+    const hodName = document.getElementById('hodName');
+    if (wizardHodName && hodName) hodName.value = wizardHodName.value;
+    
+    const wizardHodDate = document.getElementById('wizardHodDate');
+    const hodDate = document.getElementById('hodDate');
+    if (wizardHodDate && hodDate) hodDate.value = wizardHodDate.value;
+}
+
+// Sync courses from main to wizard
+function syncCoursesToWizard() {
+    const container = document.getElementById('wizardCoursesContainer');
+    if (!container) return;
+    
+    // Get existing courses from main form
+    const mainCourses = document.querySelectorAll('#coursesContainer .course-row');
+    
+    container.innerHTML = '';
+    
+    if (mainCourses.length === 0) {
+        // Add one empty course card
+        addWizardCourse();
+        return;
+    }
+    
+    mainCourses.forEach((courseRow, index) => {
+        const codeInput = courseRow.querySelector('.course-code-input');
+        const nameInput = courseRow.querySelector('.course-name-input');
+        
+        const code = codeInput ? codeInput.value : '';
+        const name = nameInput ? nameInput.value : '';
+        
+        addWizardCourseCard(index + 1, code, name);
+    });
+}
+
+// Add a course card to wizard
+function addWizardCourse() {
+    const container = document.getElementById('wizardCoursesContainer');
+    const courseNum = container.querySelectorAll('.wizard-course-card').length + 1;
+    
+    addWizardCourseCard(courseNum, '', '');
+    
+    // Also add to main form
+    if (typeof addCourseRow === 'function') {
+        addCourseRow();
+    }
+}
+
+function addWizardCourseCard(num, code, name) {
+    const container = document.getElementById('wizardCoursesContainer');
+    
+    const card = document.createElement('div');
+    card.className = 'wizard-course-card';
+    card.dataset.courseIndex = num - 1;
+    
+    card.innerHTML = `
+        <div class="wizard-course-header">
+            <div class="wizard-course-number">${num}</div>
+            <button class="wizard-course-delete" onclick="deleteWizardCourse(this)" title="Delete Course">🗑</button>
+        </div>
+        <div class="wizard-field">
+            <label>Course Code</label>
+            <input type="text" placeholder="e.g., ELET101" value="${code}" 
+                   oninput="this.value = this.value.toUpperCase(); syncWizardCourseToMain(this)">
+        </div>
+        <div class="wizard-field">
+            <label>Course Name</label>
+            <input type="text" placeholder="e.g., Introduction to Electrical" value="${name}"
+                   oninput="this.value = this.value.toUpperCase(); syncWizardCourseToMain(this)">
+        </div>
+        <button class="wizard-course-schedule-btn" onclick="scheduleWizardCourse(this)">
+            📅 Schedule This Course
+        </button>
+    `;
+    
+    container.appendChild(card);
+}
+
+// Delete wizard course
+function deleteWizardCourse(btn) {
+    const card = btn.closest('.wizard-course-card');
+    const index = parseInt(card.dataset.courseIndex);
+    
+    // Remove from main form
+    const mainCourses = document.querySelectorAll('#coursesContainer .course-row');
+    if (mainCourses[index]) {
+        mainCourses[index].remove();
+    }
+    
+    // Remove card and renumber
+    card.remove();
+    renumberWizardCourses();
+}
+
+function renumberWizardCourses() {
+    const cards = document.querySelectorAll('#wizardCoursesContainer .wizard-course-card');
+    cards.forEach((card, index) => {
+        card.dataset.courseIndex = index;
+        card.querySelector('.wizard-course-number').textContent = index + 1;
+    });
+}
+
+// Sync wizard course input to main form
+function syncWizardCourseToMain(input) {
+    const card = input.closest('.wizard-course-card');
+    const index = parseInt(card.dataset.courseIndex);
+    
+    const mainCourses = document.querySelectorAll('#coursesContainer .course-row');
+    if (!mainCourses[index]) return;
+    
+    const isCode = input.placeholder.includes('Code');
+    
+    if (isCode) {
+        const mainInput = mainCourses[index].querySelector('.course-code-input');
+        if (mainInput) mainInput.value = input.value;
+    } else {
+        const mainInput = mainCourses[index].querySelector('.course-name-input');
+        if (mainInput) mainInput.value = input.value;
+    }
+}
+
+// Schedule a course from wizard
+function scheduleWizardCourse(btn) {
+    const card = btn.closest('.wizard-course-card');
+    const codeInput = card.querySelector('input[placeholder*="Code"]');
+    const code = codeInput ? codeInput.value : '';
+    
+    if (!code.trim()) {
+        alert('Please enter a course code first');
+        return;
+    }
+    
+    // Go to schedule step
+    goToWizardStep(3);
+    
+    // Open the unified modal if available
+    setTimeout(() => {
+        if (typeof openUnifiedModal === 'function') {
+            openUnifiedModal('SUNDAY', 0);
+            // Pre-fill course code if possible
+            setTimeout(() => {
+                const unifiedCourseCode = document.getElementById('unifiedCourseCode');
+                if (unifiedCourseCode) {
+                    unifiedCourseCode.value = code;
+                }
+                const activityType = document.getElementById('unifiedActivityType');
+                if (activityType) {
+                    activityType.value = 'TEACHING';
+                    if (typeof onUnifiedActivityTypeChange === 'function') {
+                        onUnifiedActivityTypeChange();
+                    }
+                }
+            }, 100);
+        }
+    }, 400);
+}
+
+// Initialize wizard schedule table
+function initWizardScheduleTable() {
+    const tbody = document.getElementById('wizardScheduleBody');
+    if (!tbody) return;
+    
+    const days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY'];
+    const slots = 10; // Number of time slots
+    
+    tbody.innerHTML = '';
+    
+    days.forEach(day => {
+        const tr = document.createElement('tr');
+        
+        // Day cell
+        const dayCell = document.createElement('td');
+        dayCell.textContent = day.substring(0, 3);
+        tr.appendChild(dayCell);
+        
+        // Time slot cells
+        for (let i = 0; i < slots; i++) {
+            const td = document.createElement('td');
+            td.dataset.day = day;
+            td.dataset.slot = i;
+            td.onclick = function() {
+                openScheduleFromWizard(day, i);
+            };
+            tr.appendChild(td);
+        }
+        
+        tbody.appendChild(tr);
+    });
+    
+    refreshWizardSchedule();
+}
+
+// Refresh wizard schedule from main schedule
+function refreshWizardSchedule() {
+    const mainBody = document.getElementById('scheduleBody');
+    const wizardBody = document.getElementById('wizardScheduleBody');
+    
+    if (!mainBody || !wizardBody) return;
+    
+    const days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY'];
+    
+    days.forEach((day, dayIndex) => {
+        const mainRow = mainBody.children[dayIndex];
+        const wizardRow = wizardBody.children[dayIndex];
+        
+        if (!mainRow || !wizardRow) return;
+        
+        // Skip first cell (day name)
+        for (let i = 1; i < Math.min(mainRow.children.length, wizardRow.children.length); i++) {
+            const mainCell = mainRow.children[i];
+            const wizardCell = wizardRow.children[i];
+            
+            // Copy class content
+            wizardCell.innerHTML = '';
+            wizardCell.className = '';
+            
+            if (mainCell.classList.contains('merged-teaching') || mainCell.querySelector('.merged-teaching')) {
+                wizardCell.classList.add('has-class');
+                const content = mainCell.querySelector('.cell-content');
+                if (content) {
+                    const code = content.querySelector('div:first-child');
+                    if (code) {
+                        wizardCell.innerHTML = `<div style="font-weight:bold;font-size:9px;">${code.textContent}</div>`;
+                    }
+                }
+            } else if (mainCell.textContent.includes('OH')) {
+                wizardCell.classList.add('has-oh');
+                wizardCell.innerHTML = '<div style="color:#4CAF50;font-weight:bold;">OH</div>';
+            } else if (mainCell.textContent.includes('BREAK')) {
+                wizardCell.style.background = '#FFF3E0';
+                wizardCell.innerHTML = '<div style="color:#FF9800;font-size:8px;">BRK</div>';
+            } else if (mainCell.textContent.includes('NS')) {
+                wizardCell.style.background = '#F3E5F5';
+                wizardCell.innerHTML = '<div style="color:#9C27B0;font-size:8px;">NS</div>';
+            }
+        }
+    });
+}
+
+// Open schedule modal from wizard
+function openScheduleFromWizard(day, slot) {
+    if (typeof openUnifiedModal === 'function') {
+        openUnifiedModal(day, slot);
+    }
+}
+
+// Update wizard summary
+function updateWizardSummary() {
+    const teachingEl = document.getElementById('wizardSummaryTeaching');
+    const officeEl = document.getElementById('wizardSummaryOffice');
+    const coursesEl = document.getElementById('wizardSummaryCourses');
+    const totalEl = document.getElementById('wizardSummaryTotal');
+    
+    // Get values from main summary
+    const mainTeaching = document.getElementById('teachingHours');
+    const mainOffice = document.getElementById('officeHours');
+    const mainCourses = document.getElementById('numCourses');
+    const mainTotal = document.getElementById('totalWeekly');
+    
+    if (teachingEl && mainTeaching) teachingEl.textContent = mainTeaching.textContent;
+    if (officeEl && mainOffice) officeEl.textContent = mainOffice.textContent;
+    if (coursesEl && mainCourses) coursesEl.textContent = mainCourses.textContent;
+    if (totalEl && mainTotal) totalEl.textContent = mainTotal.textContent;
+}
+
+// Update acknowledgment name
+function updateWizardAckName() {
+    const wizardRank = document.getElementById('wizardRank');
+    const wizardName = document.getElementById('wizardName');
+    const wizardAckName = document.getElementById('wizardAckName');
+    
+    if (wizardAckName && wizardName) {
+        const rank = wizardRank ? wizardRank.value.trim() : '';
+        const name = wizardName.value.trim();
+        wizardAckName.value = rank ? `${rank} ${name}` : name;
+    }
+}
+
+// Update wizard signatures display
+function updateWizardSignatureDisplay(type) {
+    const mainDisplay = document.getElementById(type + 'SignatureDisplay');
+    const wizardDisplay = document.getElementById('wizard' + (type === 'faculty' ? 'Faculty' : 'Hod') + 'Signature');
+    
+    if (!mainDisplay || !wizardDisplay) return;
+    
+    const img = mainDisplay.querySelector('img');
+    if (img) {
+        wizardDisplay.innerHTML = '';
+        wizardDisplay.classList.add('has-signature');
+        const newImg = document.createElement('img');
+        newImg.src = img.src;
+        wizardDisplay.appendChild(newImg);
+    }
+}
+
+// Hook into existing signature save function
+const originalSaveSignature = window.saveSignature;
+if (typeof originalSaveSignature === 'function') {
+    window.saveSignature = function(type) {
+        originalSaveSignature(type);
+        setTimeout(() => updateWizardSignatureDisplay(type), 100);
+    };
+}
+
+// Auto-open wizard on mobile when going to individual schedule
+const originalShowIndividualSchedule = window.showIndividualSchedule;
+if (typeof originalShowIndividualSchedule === 'function') {
+    window.showIndividualSchedule = function() {
+        originalShowIndividualSchedule();
+        
+        // Check if mobile and auto-open wizard
+        if (window.innerWidth <= 768) {
+            setTimeout(() => {
+                openMobileWizard();
+            }, 300);
+        }
+    };
+}
+
+// Listen for schedule updates to refresh wizard
+const originalUpdateCalculations = window.updateCalculations;
+if (typeof originalUpdateCalculations === 'function') {
+    window.updateCalculations = function() {
+        originalUpdateCalculations();
+        
+        // Update wizard if open
+        if (document.getElementById('mobileWizard').classList.contains('active')) {
+            updateWizardSummary();
+            refreshWizardSchedule();
+        }
+    };
+}
+
+// Handle orientation change
+window.addEventListener('orientationchange', function() {
+    if (document.getElementById('mobileWizard').classList.contains('active')) {
+        setTimeout(() => {
+            refreshWizardSchedule();
+        }, 300);
+    }
+});
+
+// ========== END MOBILE WIZARD FUNCTIONALITY ==========
 
 </script>
 
