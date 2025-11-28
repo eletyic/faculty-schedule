@@ -3623,7 +3623,7 @@ body {
             flex: 1;
             height: 40px;
             display: flex;
-            align-items: center;
+            align-items: flex-end;
             justify-content: center;
             border-bottom: 1px solid #333;
             cursor: pointer;
@@ -3637,10 +3637,11 @@ body {
         }
         
         .signature-display img {
-            max-height: 35px;
+            max-height: 55px;
             max-width: 100%;
             cursor: move;
             position: relative;
+            margin-top: -20px;
             user-select: none;
             -webkit-user-drag: none;
         }
@@ -3653,6 +3654,7 @@ body {
         .signature-display .signature-placeholder {
             color: #999;
             font-size: 0.8rem;
+            margin-bottom: 5px;
         }
         
         @media print {
@@ -3677,7 +3679,7 @@ body {
         
         .pdf-export-mode .signature-display {
             cursor: default;
-            overflow: hidden;
+            overflow: visible;
         }
         
         .pdf-export-mode .signature-display:hover {
@@ -3686,6 +3688,7 @@ body {
         
         .pdf-export-mode .signature-display img {
             cursor: default;
+            margin-top: -20px;
         }
 
         .signature-clear-btn {
