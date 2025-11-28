@@ -4693,6 +4693,54 @@ body.wizard-active > *:not(#mobileWizardOverlay):not(script):not(style) {
     margin-top: 16px;
 }
 
+/* Days Selection Grid */
+.mw-days-grid {
+    display: -webkit-flex;
+    display: flex;
+    gap: 8px;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.mw-day-checkbox {
+    -webkit-flex: 1;
+    flex: 1;
+    min-width: 55px;
+    cursor: pointer;
+}
+
+.mw-day-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.mw-day-label {
+    display: block;
+    padding: 12px 8px;
+    text-align: center;
+    background: rgba(255,255,255,0.9);
+    border: 2px solid rgba(255,255,255,0.5);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    -webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+
+.mw-day-checkbox input[type="checkbox"]:checked + .mw-day-label {
+    background: var(--theme-accent, #20CE76);
+    border-color: var(--theme-accent, #20CE76);
+    color: white;
+    -webkit-transform: scale(1.05);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(32, 206, 118, 0.4);
+}
+
+.mw-day-checkbox:active .mw-day-label {
+    -webkit-transform: scale(0.95);
+    transform: scale(0.95);
+}
+
 /* Signature Box */
 .mw-signature-box {
     border: 2px dashed #ccc;
@@ -5178,14 +5226,32 @@ body.wizard-active > *:not(#mobileWizardOverlay):not(script):not(style) {
                 </div>
                 
                 <div class="mw-field">
-                    <label>Day <span class="required">*</span></label>
-                    <select id="mwDay">
-                        <option value="SUNDAY">Sunday</option>
-                        <option value="MONDAY">Monday</option>
-                        <option value="TUESDAY">Tuesday</option>
-                        <option value="WEDNESDAY">Wednesday</option>
-                        <option value="THURSDAY">Thursday</option>
-                    </select>
+                    <label>Select Days <span class="required">*</span></label>
+                    <div class="mw-days-grid">
+                        <label class="mw-day-checkbox">
+                            <input type="checkbox" name="mwDays" value="SUN">
+                            <span class="mw-day-label">Sun</span>
+                        </label>
+                        <label class="mw-day-checkbox">
+                            <input type="checkbox" name="mwDays" value="MON">
+                            <span class="mw-day-label">Mon</span>
+                        </label>
+                        <label class="mw-day-checkbox">
+                            <input type="checkbox" name="mwDays" value="TUE">
+                            <span class="mw-day-label">Tue</span>
+                        </label>
+                        <label class="mw-day-checkbox">
+                            <input type="checkbox" name="mwDays" value="WED">
+                            <span class="mw-day-label">Wed</span>
+                        </label>
+                        <label class="mw-day-checkbox">
+                            <input type="checkbox" name="mwDays" value="THU">
+                            <span class="mw-day-label">Thu</span>
+                        </label>
+                    </div>
+                    <div style="font-size: 12px; color: #666; margin-top: 8px;">
+                        💡 Select multiple days to add the same entry to each day
+                    </div>
                 </div>
                 
                 <div class="mw-field-row">
@@ -12137,7 +12203,6 @@ function mwUpdateCourseDropdown() {
 
 function mwAddScheduleEntry() {
     var actType = document.getElementById('mwActivityType').value;
-    var day = document.getElementById('mwDay').value;
     var startSlot = parseInt(document.getElementById('mwStartTime').value);
     var duration = parseInt(document.getElementById('mwDuration').value);
     
@@ -12146,41 +12211,94 @@ function mwAddScheduleEntry() {
         return;
     }
     
-    var entry = {
-        id: 'entry_' + Date.now(),
-        type: actType,
-        day: day,
-        startSlot: startSlot,
-        duration: duration
-    };
+    // Get selected days from checkboxes
+    var dayCheckboxes = document.querySelectorAll('input[name="mwDays"]:checked');
+    var selectedDays = [];
+    for (var d = 0; d < dayCheckboxes.length; d++) {
+        selectedDays.push(dayCheckboxes[d].value);
+    }
+    
+    if (selectedDays.length === 0) {
+        alert('Please select at least one day');
+        return;
+    }
+    
+    // Collect teaching/OH specific data once
+    var course = '';
+    var teachType = 'LEC';
+    var section = '';
+    var location = '';
     
     if (actType === 'TEACHING') {
-        var course = document.getElementById('mwScheduleCourse').value;
-        var teachType = document.getElementById('mwTeachingType').value;
-        var section = document.getElementById('mwSection').value;
-        var location = document.getElementById('mwLocation').value;
+        course = document.getElementById('mwScheduleCourse').value;
+        teachType = document.getElementById('mwTeachingType').value;
+        section = document.getElementById('mwSection').value;
+        location = document.getElementById('mwLocation').value;
         
         if (!course || !location) {
             alert('Please select a course and enter location');
             return;
         }
-        
-        entry.course = course;
-        entry.teachType = teachType;
-        entry.section = section;
-        entry.location = location;
     }
     
     if (actType === 'OH') {
-        entry.location = document.getElementById('mwOHLocation').value;
+        location = document.getElementById('mwOHLocation').value;
     }
     
-    mwScheduleEntries.push(entry);
+    // Create entry for each selected day
+    var entriesAdded = 0;
+    for (var i = 0; i < selectedDays.length; i++) {
+        var day = selectedDays[i];
+        
+        var entry = {
+            id: 'entry_' + Date.now() + '_' + i,
+            type: actType,
+            day: day,
+            startSlot: startSlot,
+            duration: duration
+        };
+        
+        if (actType === 'TEACHING') {
+            entry.course = course;
+            entry.teachType = teachType;
+            entry.section = section;
+            entry.location = location;
+        }
+        
+        if (actType === 'OH') {
+            entry.location = location;
+        }
+        
+        mwScheduleEntries.push(entry);
+        entriesAdded++;
+    }
+    
     mwRenderScheduleList();
+    
+    // Show confirmation
+    var dayNames = selectedDays.join(', ');
+    if (entriesAdded > 1) {
+        // Brief visual feedback
+        var btn = document.querySelector('.mw-schedule-form-btn');
+        if (btn) {
+            var originalText = btn.innerHTML;
+            btn.innerHTML = '✓ Added to ' + entriesAdded + ' days!';
+            btn.style.background = '#20CE76';
+            setTimeout(function() {
+                btn.innerHTML = originalText;
+            }, 1500);
+        }
+    }
     
     // Reset form
     document.getElementById('mwActivityType').value = '';
     mwOnActivityTypeChange();
+    
+    // Uncheck all day checkboxes
+    var allDayCheckboxes = document.querySelectorAll('input[name="mwDays"]');
+    for (var j = 0; j < allDayCheckboxes.length; j++) {
+        allDayCheckboxes[j].checked = false;
+    }
 }
 
 function mwDeleteScheduleEntry(id) {
@@ -12504,84 +12622,144 @@ function mwUpdateAckName() {
 
 // ===== GENERATE PDF =====
 function mwGeneratePDF() {
+    // Validate required data
+    if (!mwValidateStep(1) || !mwValidateStep(2)) {
+        alert('Please complete all required fields');
+        return;
+    }
+    
     // Map all wizard data to desktop form
     mwMapToDesktop();
     
     // Close wizard
     closeMobileWizard();
     
-    // Wait for DOM to update, then generate PDF
+    // Wait for DOM to fully update, then generate PDF
     setTimeout(function() {
-        if (typeof lockAndExport === 'function') {
-            lockAndExport();
+        // Trigger calculations update
+        if (typeof updateCalculations === 'function') {
+            updateCalculations();
         }
+        
+        // Wait a bit more then export
+        setTimeout(function() {
+            if (typeof lockAndExport === 'function') {
+                lockAndExport();
+            }
+        }, 300);
     }, 500);
 }
 
 function mwMapToDesktop() {
     // === Page 1: Faculty Info ===
-    setValue('departmentSelect', document.getElementById('mwDepartment').value);
-    setValue('semesterType', document.getElementById('mwSemester').value);
-    setValue('hijriYear', document.getElementById('mwHijriYear').value);
-    setValue('gregorianCode', document.getElementById('mwTermCode').value);
-    setValue('facultyRank', document.getElementById('mwRank').value);
-    setValue('facultyName', document.getElementById('mwName').value);
-    setValue('email', document.getElementById('mwEmail').value);
-    setValue('officeLocation', document.getElementById('mwOffice').value);
-    setValue('phone', document.getElementById('mwPhone').value);
+    var deptSelect = document.getElementById('departmentSelect');
+    if (deptSelect) deptSelect.value = document.getElementById('mwDepartment').value;
+    
+    var semSelect = document.getElementById('semesterType');
+    if (semSelect) semSelect.value = document.getElementById('mwSemester').value;
+    
+    var hijriInput = document.getElementById('hijriYear');
+    if (hijriInput) hijriInput.value = document.getElementById('mwHijriYear').value;
+    
+    var termInput = document.getElementById('gregorianCode');
+    if (termInput) termInput.value = document.getElementById('mwTermCode').value;
+    
+    var rankInput = document.getElementById('facultyRank');
+    if (rankInput) rankInput.value = document.getElementById('mwRank').value;
+    
+    var nameInput = document.getElementById('facultyName');
+    if (nameInput) nameInput.value = document.getElementById('mwName').value.toUpperCase();
+    
+    var emailInput = document.getElementById('email');
+    if (emailInput) emailInput.value = document.getElementById('mwEmail').value;
+    
+    var officeInput = document.getElementById('officeLocation');
+    if (officeInput) officeInput.value = document.getElementById('mwOffice').value;
+    
+    var phoneInput = document.getElementById('phone');
+    if (phoneInput) phoneInput.value = document.getElementById('mwPhone').value;
     
     // Update displays
     if (typeof updateDepartmentDisplay === 'function') updateDepartmentDisplay();
     if (typeof updateSemesterDisplay === 'function') updateSemesterDisplay();
     
     // === Page 2: Courses ===
-    // Clear existing courses
     var coursesContainer = document.getElementById('coursesContainer');
     if (coursesContainer) {
+        // Clear existing courses
         coursesContainer.innerHTML = '';
-    }
-    
-    // Add courses from wizard
-    for (var i = 0; i < mwCourses.length; i++) {
-        var course = mwCourses[i];
-        if (course.code && course.name) {
+        
+        // Reset course counter
+        if (typeof courseCounter !== 'undefined') {
+            courseCounter = 0;
+        }
+        
+        // Add courses from wizard
+        var validCourses = mwCourses.filter(function(c) { return c.code && c.name; });
+        
+        for (var i = 0; i < validCourses.length; i++) {
+            var course = validCourses[i];
+            
+            // Use the existing addCourseRow function if available
             if (typeof addCourseRow === 'function') {
                 addCourseRow();
-                var rows = document.querySelectorAll('#coursesContainer .course-row');
+            } else if (typeof createCourseRow === 'function') {
+                var newRow = createCourseRow();
+                coursesContainer.appendChild(newRow);
+            }
+            
+            // Get the newly added row and fill it
+            var rows = coursesContainer.querySelectorAll('.course-row');
+            if (rows.length > 0) {
                 var lastRow = rows[rows.length - 1];
-                if (lastRow) {
-                    var codeInput = lastRow.querySelector('.course-code-input');
-                    var nameInput = lastRow.querySelector('.course-name-input');
-                    if (codeInput) codeInput.value = course.code;
-                    if (nameInput) nameInput.value = course.name;
+                var codeInput = lastRow.querySelector('.course-code-input');
+                var nameInputCourse = lastRow.querySelector('.course-name-input');
+                
+                if (codeInput) {
+                    codeInput.value = course.code.toUpperCase();
+                    // Trigger change event to update any listeners
+                    codeInput.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+                if (nameInputCourse) {
+                    nameInputCourse.value = course.name.toUpperCase();
+                    nameInputCourse.dispatchEvent(new Event('change', { bubbles: true }));
                 }
             }
         }
     }
     
     // === Page 3: Schedule ===
-    // Clear existing schedule
-    if (typeof clearAllCells === 'function') {
-        // clearAllCells(); // If this function exists
-    }
-    
-    // Map schedule entries to desktop table
+    // Map schedule entries using the existing applyTeachingSession function
     for (var j = 0; j < mwScheduleEntries.length; j++) {
         var entry = mwScheduleEntries[j];
         mwAddToDesktopSchedule(entry);
     }
     
     // === Page 4: Signatures ===
-    setValue('instructorAckName', document.getElementById('mwAckName').value);
-    setValue('instructorAckDate', document.getElementById('mwFacultyDate').value);
-    setValue('hodName', document.getElementById('mwHodName').value);
-    setValue('hodDate', document.getElementById('mwHodDate').value);
+    var ackNameInput = document.getElementById('instructorAckName');
+    if (ackNameInput) {
+        var ackName = document.getElementById('mwAckName').value;
+        ackNameInput.value = ackName.toUpperCase();
+    }
+    
+    var ackDateInput = document.getElementById('instructorAckDate');
+    if (ackDateInput) ackDateInput.value = document.getElementById('mwFacultyDate').value;
+    
+    var hodNameInput = document.getElementById('hodName');
+    if (hodNameInput) {
+        var hodName = document.getElementById('mwHodName').value;
+        hodNameInput.value = hodName.toUpperCase();
+    }
+    
+    var hodDateInput = document.getElementById('hodDate');
+    if (hodDateInput) hodDateInput.value = document.getElementById('mwHodDate').value;
     
     // Faculty signature
     if (mwSignatures.faculty) {
         var facultySigDisplay = document.getElementById('facultySignatureDisplay');
         if (facultySigDisplay) {
             facultySigDisplay.innerHTML = '<img src="' + mwSignatures.faculty + '" style="max-height: 60px; max-width: 100%;">';
+            facultySigDisplay.classList.add('has-signature');
         }
     }
     
@@ -12590,60 +12768,71 @@ function mwMapToDesktop() {
         var hodSigDisplay = document.getElementById('hodSignatureDisplay');
         if (hodSigDisplay) {
             hodSigDisplay.innerHTML = '<img src="' + mwSignatures.hod + '" style="max-height: 60px; max-width: 100%;">';
+            hodSigDisplay.classList.add('has-signature');
         }
-    }
-    
-    // Update calculations
-    if (typeof updateCalculations === 'function') {
-        updateCalculations();
     }
 }
 
 function mwAddToDesktopSchedule(entry) {
-    var dayMap = {
-        'SUNDAY': 0,
-        'MONDAY': 1,
-        'TUESDAY': 2,
-        'WEDNESDAY': 3,
-        'THURSDAY': 4
-    };
+    // Day is already in SUN/MON/TUE/WED/THU format
+    var dayCode = entry.day;
     
-    var dayIndex = dayMap[entry.day];
-    if (dayIndex === undefined) return;
-    
-    var scheduleBody = document.getElementById('scheduleBody');
-    if (!scheduleBody) return;
-    
-    var row = scheduleBody.children[dayIndex];
-    if (!row) return;
-    
-    // Find the starting cell (column = startSlot + 1 because first col is day name)
-    var startCol = entry.startSlot + 1;
-    var cell = row.children[startCol];
-    if (!cell) return;
-    
-    // Use existing addMergedBlock if available, otherwise set directly
-    if (entry.type === 'TEACHING' && typeof addMergedBlock === 'function') {
-        var data = {
-            courseCode: entry.course,
-            type: entry.teachType,
-            section: entry.section || '',
-            location: entry.location,
-            transferFlag: false
-        };
-        addMergedBlock(entry.day, entry.startSlot, entry.duration, data);
-    } else if (entry.type === 'OH' && typeof setCellAsOfficeHours === 'function') {
+    // Use the existing applyTeachingSession function for teaching entries
+    if (entry.type === 'TEACHING' && typeof applyTeachingSession === 'function') {
+        applyTeachingSession(
+            dayCode,
+            entry.startSlot,
+            entry.duration,
+            entry.course || '',
+            entry.teachType || 'LEC',
+            entry.location || ''
+        );
+    } else {
+        // For non-teaching entries, we need to set cells directly
+        var scheduleBody = document.getElementById('scheduleBody');
+        if (!scheduleBody) return;
+        
+        // Find the correct row (SUN=0, MON=1, etc.)
+        var dayIndex = ['SUN', 'MON', 'TUE', 'WED', 'THU'].indexOf(dayCode);
+        if (dayIndex < 0) return;
+        
+        var row = scheduleBody.children[dayIndex];
+        if (!row) return;
+        
+        // Apply to cells
         for (var k = 0; k < entry.duration; k++) {
-            var ohCell = row.children[startCol + k];
-            if (ohCell) {
-                setCellAsOfficeHours(ohCell, entry.location || '');
-            }
-        }
-    } else if (typeof setCellContent === 'function') {
-        for (var m = 0; m < entry.duration; m++) {
-            var targetCell = row.children[startCol + m];
-            if (targetCell) {
-                setCellContent(targetCell, entry.type, '');
+            var cellId = 'cell-' + dayCode + '-' + (entry.startSlot + k);
+            var cell = document.getElementById(cellId);
+            if (cell) {
+                // Get or create cell content div
+                var cellContent = cell.querySelector('.cell-content');
+                if (!cellContent) {
+                    cellContent = document.createElement('div');
+                    cellContent.className = 'cell-content';
+                    cell.appendChild(cellContent);
+                }
+                
+                // Set cell type
+                if (entry.type === 'OH') {
+                    cell.classList.add('type-OH');
+                    cell.dataset.type = 'OH';
+                    cellContent.innerHTML = '<div style="font-weight:bold; font-size:11px;">OH</div>';
+                    if (entry.location) {
+                        cellContent.innerHTML += '<div style="font-size:9px;">' + entry.location.toUpperCase() + '</div>';
+                    }
+                } else if (entry.type === 'BREAK') {
+                    cell.classList.add('type-BREAK');
+                    cell.dataset.type = 'BREAK';
+                    cellContent.innerHTML = '<div style="font-weight:bold; font-size:11px;">BREAK</div>';
+                } else if (entry.type === 'CH') {
+                    cell.classList.add('type-CH');
+                    cell.dataset.type = 'CH';
+                    cellContent.innerHTML = '<div style="font-weight:bold; font-size:11px;">CH</div>';
+                } else if (entry.type === 'NS') {
+                    cell.classList.add('type-NS');
+                    cell.dataset.type = 'NS';
+                    cellContent.innerHTML = '<div style="font-weight:bold; font-size:11px;">NS</div>';
+                }
             }
         }
     }
