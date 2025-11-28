@@ -4207,6 +4207,43 @@ body {
         }
         /* ========== END MOBILE STYLES ========== */
         
+        /* PDF Export mode - force desktop layout */
+        body.pdf-export-mode {
+            overflow: visible !important;
+        }
+        
+        body.pdf-export-mode .container {
+            width: 1200px !important;
+            max-width: none !important;
+            min-width: 1200px !important;
+            margin: 0 !important;
+            padding: 15px 25px !important;
+            transform: none !important;
+        }
+        
+        body.pdf-export-mode .schedule-table-wrapper {
+            overflow: visible !important;
+            width: 100% !important;
+        }
+        
+        body.pdf-export-mode .schedule-table {
+            width: 100% !important;
+            min-width: 100% !important;
+            table-layout: fixed !important;
+        }
+        
+        body.pdf-export-mode .schedule-table-wrapper::after {
+            display: none !important;
+        }
+        
+        body.pdf-export-mode .mw-trigger {
+            display: none !important;
+        }
+        
+        body.pdf-export-mode #mobileWizardOverlay {
+            display: none !important;
+        }
+        
         @media print {
             .header {
                 display: flex !important;
@@ -12628,26 +12665,123 @@ function mwGeneratePDF() {
         return;
     }
     
-    // Map all wizard data to desktop form
-    mwMapToDesktop();
+    // Show loading message
+    var loadingDiv = document.createElement('div');
+    loadingDiv.id = 'mwLoadingOverlay';
+    loadingDiv.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:999999;display:flex;align-items:center;justify-content:center;flex-direction:column;color:white;font-size:18px;';
+    loadingDiv.innerHTML = '<div style="font-size:48px;margin-bottom:20px;">📄</div><div>Preparing Schedule...</div><div style="font-size:14px;margin-top:10px;opacity:0.8;">Mapping data to desktop layout</div>';
+    document.body.appendChild(loadingDiv);
     
-    // Close wizard
+    // Close wizard first
     closeMobileWizard();
     
-    // Wait for DOM to fully update, then generate PDF
+    // Wait a moment then map data
     setTimeout(function() {
-        // Trigger calculations update
-        if (typeof updateCalculations === 'function') {
-            updateCalculations();
-        }
+        // Map all wizard data to desktop form
+        mwMapToDesktop();
         
-        // Wait a bit more then export
+        loadingDiv.innerHTML = '<div style="font-size:48px;margin-bottom:20px;">📄</div><div>Generating PDF...</div><div style="font-size:14px;margin-top:10px;opacity:0.8;">Please wait...</div>';
+        
+        // Force desktop view for PDF generation
+        mwForceDesktopForPDF();
+        
+        // Wait for layout to settle, then export
         setTimeout(function() {
-            if (typeof lockAndExport === 'function') {
-                lockAndExport();
+            // Trigger calculations update
+            if (typeof updateCalculations === 'function') {
+                updateCalculations();
             }
-        }, 300);
-    }, 500);
+            
+            // Reflow merged sessions
+            if (typeof reflowMergedSessions === 'function') {
+                reflowMergedSessions();
+            }
+            
+            // Wait a bit more then export
+            setTimeout(function() {
+                // Remove loading overlay
+                var overlay = document.getElementById('mwLoadingOverlay');
+                if (overlay) overlay.remove();
+                
+                // Call export function
+                if (typeof lockAndExport === 'function') {
+                    lockAndExport();
+                }
+                
+                // Restore mobile view after PDF
+                setTimeout(function() {
+                    mwRestoreMobileView();
+                }, 5000);
+            }, 500);
+        }, 500);
+    }, 300);
+}
+
+// Force desktop layout for PDF capture
+function mwForceDesktopForPDF() {
+    // Add class to force desktop layout
+    document.body.classList.add('mw-force-desktop-pdf');
+    
+    // Create style element for forcing desktop view
+    var style = document.createElement('style');
+    style.id = 'mwDesktopPDFStyle';
+    style.textContent = '' +
+        '.mw-force-desktop-pdf .page-container { display: block !important; }' +
+        '.mw-force-desktop-pdf .container { ' +
+        '   width: 1200px !important; ' +
+        '   max-width: none !important; ' +
+        '   margin: 0 auto !important; ' +
+        '   transform: none !important; ' +
+        '}' +
+        '.mw-force-desktop-pdf .schedule-table-wrapper { ' +
+        '   overflow: visible !important; ' +
+        '   width: 100% !important; ' +
+        '}' +
+        '.mw-force-desktop-pdf .schedule-table { ' +
+        '   width: 100% !important; ' +
+        '   min-width: 100% !important; ' +
+        '   font-size: 11px !important; ' +
+        '}' +
+        '.mw-force-desktop-pdf .faculty-info-wrapper { ' +
+        '   width: 100% !important; ' +
+        '}' +
+        '.mw-force-desktop-pdf .summary { ' +
+        '   width: 100% !important; ' +
+        '}' +
+        '.mw-force-desktop-pdf .footer { ' +
+        '   width: 100% !important; ' +
+        '}' +
+        '.mw-force-desktop-pdf .mw-trigger { display: none !important; }' +
+        '.mw-force-desktop-pdf #mobileWizardOverlay { display: none !important; }' +
+        '@media screen and (max-width: 768px) {' +
+        '   .mw-force-desktop-pdf .container { ' +
+        '       width: 1200px !important; ' +
+        '       transform: scale(0.3) !important; ' +
+        '       transform-origin: top left !important; ' +
+        '   }' +
+        '}';
+    document.head.appendChild(style);
+    
+    // Ensure the individual schedule page is visible
+    var schedulePage = document.getElementById('individualSchedulePage');
+    if (schedulePage) {
+        schedulePage.classList.add('active');
+    }
+    
+    var landingPage = document.getElementById('landingPage');
+    if (landingPage) {
+        landingPage.classList.remove('active');
+    }
+}
+
+// Restore mobile view after PDF
+function mwRestoreMobileView() {
+    document.body.classList.remove('mw-force-desktop-pdf');
+    
+    var style = document.getElementById('mwDesktopPDFStyle');
+    if (style) {
+        style.remove();
+    }
 }
 
 function mwMapToDesktop() {
